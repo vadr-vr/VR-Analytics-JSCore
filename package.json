@@ -1,0 +1,16 @@
+{
+  "name": "vadr-js-core",
+  "version": "1.0.0",
+  "description": "This package is used by VadRs platform sprecific packages to provide VR analytics",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/abhishekbansal1993/vadrjscore.git"
+  },
+  "author": "VadR <contactus@vadr.io> (https://www.vadr.io)",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/abhishekbansal1993/vadrjscore#readme"
+}

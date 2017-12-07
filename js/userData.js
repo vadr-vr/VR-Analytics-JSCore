@@ -7,10 +7,11 @@ class User{
 
     constructor(userId){
 
-        this.userId = "";
+        this.userId = '';
         this.extraInfo = {};
 
-        this.setUserId(userId);
+        if (userId)
+            this.setUserId(userId);
 
     }
 
@@ -21,7 +22,7 @@ class User{
      */
     setUserId(userId, override){
 
-        if (override || this.userId == "")
+        if (override || this.userId == '')
             this.userId = userId.toString();
 
     }
@@ -43,7 +44,7 @@ class User{
      */
     validate(){
 
-        if (this.userId == "")
+        if (this.userId == '')
             return false;
         else 
             return true;
@@ -57,7 +58,7 @@ class User{
     getUserDictionary(){
         
         const userDict = {};
-        userDict["userId"] = this.userId;
+        userDict['userId'] = this.userId;
 
         for (let key in this.extraInfo){
             

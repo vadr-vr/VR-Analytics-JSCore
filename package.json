@@ -4,7 +4,8 @@
   "description": "This package is used by VadRs platform sprecific packages to provide VR analytics",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require babel-core/register",
+    "test1": "node ./test/test.js"
   },
   "repository": {
     "type": "git",
@@ -12,5 +13,14 @@
   },
   "author": "VadR <contactus@vadr.io> (https://www.vadr.io)",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/abhishekbansal1993/vadrjscore#readme"
+  "homepage": "https://bitbucket.org/abhishekbansal1993/vadrjscore#readme",
+  "dependencies": {
+    "axios": "^0.16.0",
+    "uuid": "^2.0.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "mocha": "^4.0.1"
+  }
 }

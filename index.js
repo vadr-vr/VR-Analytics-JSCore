@@ -1,4 +1,4 @@
-import User from "./js/userData.js";
+import User from './js/userData.js';
 /*
     CONFIGURATION FILE - 
         appId, appToken

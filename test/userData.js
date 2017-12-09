@@ -1,5 +1,5 @@
 var assert = require('assert');
-import {User} from '../js/userData.js';
+import User from '../js/userData.js';
 
 function userDataTests(){
     
@@ -128,4 +128,4 @@ function userDataTests(){
     
 }
 
-export {userDataTests};
+export default userDataTests;

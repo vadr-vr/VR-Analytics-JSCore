@@ -1,3 +1,3 @@
-import {userDataTests} from './userData.js';
+import userDataTests from './userData.js';
 
 userDataTests();

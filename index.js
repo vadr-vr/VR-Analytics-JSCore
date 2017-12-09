@@ -1,4 +1,8 @@
-import User from './js/userData.js';
+import User from './js/userData';
+import logger from './js/logger';
+import timeManager from './js/timeManager';
+
+console.log(logger);
 /*
     CONFIGURATION FILE - 
         appId, appToken

@@ -17,16 +17,16 @@ const consoleDebug = console.log.bind(console, 'Vadr Analytics:');
  * @memberof Logger
  * @returns {number} 
  */
-const getLogLevel = function(){
+function getLogLevel(){
     return logLevel;
-};
+}
 
 /**
  * Set log level for analytics
  * @memberof Logger
  * @param {number} level Integer logLevel value between 0 and 4
  */
-const setLogLevel = function(level){
+function setLogLevel(level){
 
     level = level > 0 ? level : 0;
     level = level < 4 ? level : 4;
@@ -34,59 +34,59 @@ const setLogLevel = function(level){
     
     logLevel = level; 
 
-};
+}
 
 /**
  * Log error 
  * @memberof Logger
  * @param {arguments} log arguments 
  */
-const error = function(){
+function error(){
 
     if (logLevel >= 1){
         consoleError.apply(console, arguments);
     }
 
-};
+}
 
 /**
  * Log warning 
  * @memberof Logger
  * @param {arguments} log arguments 
  */
-const warn = function(){
+function warn(){
     
     if (logLevel >= 2){
         consoleWarn.apply(console, arguments);
     }
 
-};
+}
 
 /**
  * Log info 
  * @memberof Logger
  * @param {arguments} log arguments 
  */
-const info = function(){
+function info(){
     
     if (logLevel >= 3){
         consoleInfo.apply(console, arguments);
     }
 
-};
+}
 
 /**
  * Log debug messages 
  * @memberof Logger
  * @param {arguments} log arguments 
  */
-const debug = function(){
+function debug(){
 
     if (logLevel == 4){
         consoleDebug.apply(console, arguments);
     }
 
-};
+}
         
 export default {
     getLogLevel,

@@ -24,6 +24,6 @@ function getFrameUnixTime(){
 
 export default {
     getFrameUnixTime
-}
+};
 
 // TODO - handle game pause, controller removed etc.

@@ -1,3 +1,5 @@
-import userDataTests from './userData.js';
+import userDataTests from './userData';
+import timeManagerTests from './timeManager';
 
 userDataTests();
+timeManagerTests();

@@ -48,6 +48,19 @@ function setApplicationTimes(unixTime, appActive, appPlaying){
 }
 
 /**
+ * Reset the timings, sets the frame time to unix time provided, reset others
+ * @param {number} unixTime new unix time of the frame 
+ */
+function reset(unixTime){
+
+    frameUnixTime = unixTime;
+    frameDuration = 0;
+    timeSinceStart = 0;
+    playTimeSinceStart = 0;
+
+}
+
+/**
  * Get the frameUnixTime
  * @memberof TimeManager
  * @returns {number} unixTime of the current frame 
@@ -93,6 +106,7 @@ function getPlayTimeSinceStart(){
 
 export default {
     setApplicationTimes,
+    reset,
     getFrameUnixTime,
     getFrameDuration,
     getTimeSinceStart,

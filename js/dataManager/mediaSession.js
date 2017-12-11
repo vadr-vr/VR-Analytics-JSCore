@@ -37,6 +37,16 @@ class mediaSession{
     }
 
     /**
+     * Assign url of media after initialization 
+     * @param {string} newUrl name of the property to be set
+     */
+    setUrl(newUrl){
+
+        this.url = newUrl;
+
+    }
+
+    /**
      * Adds event to the events list 
      * @param {string} eventName name of the event
      * @param {string} position 3D position associated with the event

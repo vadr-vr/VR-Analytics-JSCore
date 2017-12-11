@@ -1,11 +1,12 @@
 import uuid from 'uuid';
 /**
- * @module utils
+ * @module Utils
  * @description Contains utility functions
  */
 
 /**
  * Used to generate session, sceneSession or mediaSession tokens
+ * @memberof Utils
  * @returns {string} unique token
  */
 function getToken(){
@@ -14,6 +15,7 @@ function getToken(){
 
 /**
  * Used to get unix time in seconds
+ * @memberof Utils
  * @returns {number} unix time in seconds
  */
 function getUnixTimeInSeconds(){
@@ -24,6 +26,7 @@ function getUnixTimeInSeconds(){
 
 /**
  * Used to get unix time in milliseconds
+ * @memberof Utils
  * @returns {number} unix time in milliseconds
  */
 function getUnixTimeInMilliseconds(){
@@ -34,6 +37,7 @@ function getUnixTimeInMilliseconds(){
 
 /**
  * Used to get seconds from milliseconds
+ * @memberof Utils
  * @returns {number} duration in milliseconds
  */
 function convertMillisecondsToSeconds(milliseconds){

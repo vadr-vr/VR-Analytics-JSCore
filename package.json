@@ -4,8 +4,7 @@
   "description": "This package is used by VadRs platform sprecific packages to provide VR analytics",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require babel-core/register",
-    "test1": "node ./test/test.js"
+    "test": "mocha --require babel-core/register"
   },
   "repository": {
     "type": "git",

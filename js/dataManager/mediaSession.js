@@ -1,15 +1,15 @@
 import utils from '../utils';
 import timeManager from '../timeManager';
+
 /**
  * Stores events for a single media playback.
- * UserId can be set anytime after initialization.
  * @param {string} mediaId Developer defined mediaId for the media
  * @param {string} name Media name to be displayed to the analytics user
  * @param {number} type Type of media 1 - Video, 2 - Photo
  * @param {number} sceneStartTime Time since start of scene when media is displayed 
  * @param {string} url Url for the media [optional]
  */
-class mediaSession{
+class MediaSession{
     
     constructor(mediaId, name, type, sceneStartTime, url){
 
@@ -52,8 +52,8 @@ class mediaSession{
      * @param {string} position 3D position associated with the event
      * @param {object} extra extra information and filter key-value pairs in the event
      * @param {number} gameTime time since start of scene when the event occurred
-     * @param {number} eventTime unix time in millisseconds when the event occurred
-     * @param {number} eventPlayTimeSinceStart unix time in millisseconds when the event occurred
+     * @param {number} eventTime unix time in milliseconds when the event occurred
+     * @param {number} eventPlayTimeSinceStart time in milliseconds when the application started
      * @param {number} videoDuration seek time of the video when event occurred [optional]
      */
     registerEvent(eventName, position, extra, gameTime, eventTime, eventPlayTimeSinceStart,
@@ -77,7 +77,7 @@ class mediaSession{
      * Fetch the dictionary corresponding to this media
      * @returns {object} dictionary form of media
      */
-    getMediaDictionary(){
+    getDictionary(){
 
         const mediaDictionary = {
             'id': this.mediaId,
@@ -98,4 +98,4 @@ class mediaSession{
     
 }
 
-export default mediaSession;
+export default MediaSession;

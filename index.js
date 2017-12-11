@@ -1,7 +1,6 @@
 import User from './js/userData';
 import logger from './js/logger';
-import timeManager from './js/timeManager';
-
+import dataManager from './js/dataManager/dataManager';
 console.log(logger);
 /*
     CONFIGURATION FILE - 

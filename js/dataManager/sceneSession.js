@@ -41,8 +41,10 @@ class SceneSession{
      */
     addMedia(mediaId, name, type, url){
         
-        const timeSinceSceneBegin = timeManager.getPlayTimeSinceStart() - this.sceneBeginTime;
-        this.currentMediaSession = new mediaSession(mediaId, name, type, timeSinceSceneBegin, url);
+        const timeSinceSceneBegin = timeManager.getPlayTimeSinceStart() -
+            this.sceneBeginTime;
+        this.currentMediaSession = new mediaSession(mediaId, name, type,
+            timeSinceSceneBegin, url);
         this.media.push(this.currentMediaSession);
 
     }
@@ -50,16 +52,16 @@ class SceneSession{
     /**
      * Closes an ongoing media session
      */
-    closeMediaSession(){
+    closeMedia(){
 
         if (!(this.currentMediaSession)){
 
-            logger.warn('Request to close non existent session, returning');
+            logger.warn('Request to close non existent media session, Aborting');
             return;
 
         }
 
-        // Place to register any additional events before closing the session
+        // Place to register any additional events before closing the media session
 
         this.currentMediaSession = null;        
 
@@ -72,7 +74,7 @@ class SceneSession{
      * @param {string} position 3D position associated with the event
      * @param {object} extra extra information and filter key-value pairs in the event
      * @param {number} eventTime unix time in millisseconds when the event occurred
-     * @param {number} eventPlayTimeSinceStart time in milliseconds when the application started
+     * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
      */
     _registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart){
 
@@ -85,8 +87,34 @@ class SceneSession{
     }
 
     /**
+     * Adds event to event list of media if it exists, else to its own events list
+     * @param {string} eventName name of the event
+     * @param {string} position 3D position associated with the event
+     * @param {object} extra extra information and filter key-value pairs in the event
+     * @param {number} eventTime unix time in millisseconds when the event occurred
+     * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
+     * @param {number} videoDuration videoDuraton in case of 360 video
+     */
+    registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart, 
+        videoDuration){
+
+        if (this.currentMediaSession){
+
+            const gameTime = eventPlayTimeSinceStart - this.sceneBeginTime;
+            this.currentMediaSession.registerEvent(eventName, position, extra, gameTime, eventTime, eventPlayTimeSinceStart, videoDuration);
+
+        } else {
+
+            this._registerEvent(eventName, position, extra, eventTime,
+                eventPlayTimeSinceStart);
+            
+        }
+
+    }
+
+    /**
      * Fetch the dictionary corresponding to this media
-     * @returns {object} dictionary form of media
+     * @returns {object} dictionary form of sceneSession
      */
     getDictionary(){
 
@@ -94,13 +122,48 @@ class SceneSession{
             'sceneId': this.mediaId,
             'startTime': utils.convertMillisecondsToSeconds(this.startTime),
             'sceneToken': this.token,
-            'events': this.events
+            'events': this.events,
+            'media': []
         };
 
         if (this.name)
             sceneSessionDictionary['sceneName'] = this.name;
 
+        // fetch all the media dictionaries
+        for (let i = 0; i < this.media.length; i++){
+
+            sceneSessionDictionary['media'].push(this.media[i].getDictionary());
+
+        }
+
         return sceneSessionDictionary;
+
+    }
+
+    /**
+     * Returns a duplicate duplicate of the current scene session without any data. 
+     * Assigns the last active media if present
+     * @returns {SceneSession} duplicate scene session
+     */
+    getDuplicate(){
+
+        const newSceneSession = new SceneSession(this.sceneId, this.name);
+
+        // assign params not passed to the constructor
+        newSceneSession.startTime = this.startTime;
+        newSceneSession.sceneBeginTime = this.sceneBeginTime;
+        newSceneSession.token = this.token;
+
+        // set a duplicate media if any media active
+        if (this.currentMediaSession){
+
+            const mediaSessionDuplicate = this.currentMediaSession.getDuplicate();
+            newSceneSession.currentMediaSession = mediaSessionDuplicate;
+            newSceneSession.media.push(newSceneSession.currentMediaSession);
+
+        }
+
+        return newSceneSession;
 
     }
     

@@ -53,11 +53,11 @@ class MediaSession{
      * @param {object} extra extra information and filter key-value pairs in the event
      * @param {number} gameTime time since start of scene when the event occurred
      * @param {number} eventTime unix time in milliseconds when the event occurred
-     * @param {number} eventPlayTimeSinceStart time in milliseconds when the application started
+     * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
      * @param {number} videoDuration seek time of the video when event occurred [optional]
      */
-    registerEvent(eventName, position, extra, gameTime, eventTime, eventPlayTimeSinceStart,
-        videoDuration){
+    registerEvent(eventName, position, extra, gameTime, eventTime, 
+        eventPlayTimeSinceStart, videoDuration){
 
         this.events.eventName.push(eventName);
         this.events.position.push(position);
@@ -93,6 +93,24 @@ class MediaSession{
             mediaDictionary['url'] = this.url;
 
         return mediaDictionary;
+
+    }
+
+    /**
+     * Returns a duplicate of the current media without any data in it
+     * @returns {MediaSession} duplicate media session
+     */
+    getDuplicate(){
+
+        const newMediaSession = new MediaSession(this.mediaId, this.name, this.type, 
+            this.sceneStartTime, this.url);
+
+        // assign properties not passed to constructor
+        newMediaSession.token = this.token;
+        newMediaSession.startTime = this.startTime;
+        newMediaSession.mediaBeginTime = this.mediaBeginTime;
+        
+        return newMediaSession;
 
     }
     

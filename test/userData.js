@@ -1,6 +1,7 @@
 var assert = require('assert');
 import User from '../js/userData.js';
 
+// dont use userDataTest. Need to be updated
 function userDataTests(){
     
     describe('UserData Test', function() {

@@ -1,75 +1,73 @@
+import deviceData from './deviceData';
 /**
- * Stores the user information such as user id and other details such as age, gender etc.
- * UserId can be set anytime after initialization.
- * @param {string} userId User id   
+ * @module User
+ * @description Stores the user information such as user id and other details such as 
+ * age, gender etc.
+ * Until userId id is set, device id is used in its place.
  */
-class User{
 
-    constructor(userId){
+let userId = '';
+let extraInfo = {};
 
-        this.userId = '';
-        this.extraInfo = {};
+/**
+ * Set user id
+ * @memberof User
+ * @param {string} newUserId userId of the user
+ * @param {boolean} override override any existing userId
+ */
+function setUserId(newUserId, override){
 
-        if (userId)
-            this.setUserId(userId);
+    if (override || userId == ''){
 
-    }
-
-    /**
-     * Sets the user id of the user. 
-     * @param {string} userId user id
-     * @param {boolean} override determines whether to override the existing userId. 
-     */
-    setUserId(userId, override){
-
-        if (override || this.userId == '')
-            this.userId = userId.toString();
-
-    }
-
-    /**
-     * Used to set any extra user information such as age, gender etc.
-     * @param {string} infoKey name of the paramter being set
-     * @param {string} infoValue value of the parameter
-     */
-    setExtraInfo(infoKey, infoValue){
-
-        this.extraInfo[infoKey.toString()] = infoValue.toString();
-
-    }
-
-    /**
-     * Used to test whether the user details set are valid or not
-     * @returns {boolean} false if the user id is not set. Else returns true.
-     */
-    validate(){
-
-        if (this.userId == '')
-            return false;
-        else 
-            return true;
-
-    }
-
-    /**
-     * Used to get all the user details in a dictionary format
-     * @returns {dictionary} dictionary 
-     */
-    getUserDictionary(){
-        
-        const userDict = {};
-        userDict['userId'] = this.userId;
-
-        for (let key in this.extraInfo){
-            
-            userDict[key] = this.extraInfo[key];
-        
-        }
-
-        return userDict;
+        userId = newUserId;
 
     }
 
 }
 
-export default User;
+/**
+ * Used to set any extra user information such as age, gender etc.
+ * @memberof User
+ * @param {string} infoKey name of the paramter being set
+ * @param {string} infoValue value of the parameter
+ */
+function setExtraInfo(infoKey, infoValue){
+
+    extraInfo[infoKey.toString()] = infoValue.toString();
+
+}
+
+/**
+ * Used to get all the user details in a dictionary format
+ * @memberof User
+ * @returns {dictionary} dictionary 
+ */
+function getUserDictionary(){
+    
+    const userDict = {};
+
+    if (userId == ''){
+
+        userDict['userId'] = deviceData.getDeviceId();
+
+    } else {
+
+        userDict['userId'] = userId;
+
+    }
+
+    for (let key in extraInfo){
+        
+        userDict[key] = extraInfo[key];
+    
+    }
+
+    return userDict;
+
+}
+
+export default {
+    setUserId,
+    setExtraInfo,
+    getUserDictionary
+};

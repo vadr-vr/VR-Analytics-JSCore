@@ -6,8 +6,6 @@ import mediaSession from './mediaSession';
  */
 
 let currentSession = null;
-let currentScene = null;
-let currentMedia = null;
 
 export default {
     utils, 

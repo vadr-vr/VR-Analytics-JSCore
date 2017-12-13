@@ -1,3 +1,4 @@
+import utils from './utils';
 /**
  * @module TimeManager
  * @description Manages the different timings in the web application
@@ -28,6 +29,9 @@ let timeSinceStart = 0;
  */
 let playTimeSinceStart = 0;
 
+let videoDuration = 0;
+let videoPlaying = false;
+
 /**
  * Updates the application timings.
  * Calculates frameTime as the difference of current 
@@ -43,7 +47,15 @@ function setApplicationTimes(unixTime, appActive, appPlaying){
     frameDuration = appActive ? unixTime - frameUnixTime : 0;
     frameUnixTime = unixTime;
     timeSinceStart += frameDuration;
-    playTimeSinceStart = appPlaying ? playTimeSinceStart + frameDuration : playTimeSinceStart;
+    playTimeSinceStart = appPlaying ? playTimeSinceStart + frameDuration : 
+        playTimeSinceStart;
+
+    if (videoPlaying){
+
+        videoDuration += utils.convertMillisecondsToSecondsFloat(frameDuration);
+
+    }
+
 
 }
 
@@ -104,11 +116,71 @@ function getPlayTimeSinceStart(){
 
 }
 
+// function related to video duration
+
+/**
+ * Play the video, use to 1. create new video (assumes video duration was set to 
+ * 0 by the last video stop call) 2. play existing paused video.
+ * @memberof TimeManager 
+ */
+function playVideo(){
+
+    videoPlaying = true;
+
+}
+
+/**
+ * Pause the currently playing video
+ * @memberof TimeManager
+ */
+function pauseVideo(){
+
+    videoPlaying = false;
+
+}
+
+/**
+ * Stop the currently playing video. Resets the video duration to 0
+ * @memberof TimeManager
+ */
+function stopVideo(){
+
+    videoDuration = 0;
+    videoPlaying = false;
+
+}
+
+/**
+ * Set new seek positon of the currently playing video
+ * @memberof TimeManager
+ */
+function setVideoDuration(newSeek){
+
+    videoDuration = newSeek;
+
+}
+
+/**
+ * Get the current seek position of the playing video
+ * @memberof TimeManager
+ */
+function getVideoDuration(){
+
+    return videoDuration;
+
+}
+
 export default {
     setApplicationTimes,
     reset,
     getFrameUnixTime,
     getFrameDuration,
     getTimeSinceStart,
-    getPlayTimeSinceStart
+    getPlayTimeSinceStart,
+
+    playVideo,
+    pauseVideo, 
+    stopVideo,
+    setVideoDuration, 
+    getVideoDuration
 };

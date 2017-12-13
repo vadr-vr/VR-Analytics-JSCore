@@ -5,6 +5,8 @@
  */
 
 let testMode = false;
+let dataPostTimeInterval = 30;
+let dataPostMaxEvents = 1000;
 
 const applicationConfig = {
     'appId': '',
@@ -37,6 +39,7 @@ const dataConfig = {
 
 /**
  * Sets the test mode of the application
+ * @memberof ApplicationConfig
  * @param {boolean} test set it to true while developing, false when shipping in 
  * production
  */
@@ -49,6 +52,7 @@ function setTestMode(test){
 
 /**
  * Returns the test mode value
+ * @memberof ApplicationConfig
  * @returns {boolean} testMode
  */
 function getTestMode(){
@@ -57,14 +61,34 @@ function getTestMode(){
 
 }
 
+/**
+ * Returns the time interval between send data request
+ * @memberof ApplicationConfig
+ * @returns {number} 
+ */
+function getDataPostTimeInterval(){
+
+    return dataPostTimeInterval;
+
+}
+
+/**
+ * Returns the max number of events after which a request is scheduled to the server
+ * @memberof ApplicationConfig
+ * @returns {number}
+ */
+function getMaxEventsNumber(){
+
+    return dataPostMaxEvents;
+
+}
+
 export default {
     setTestMode,
-    getTestMode
+    getTestMode,
+    getDataPostTimeInterval,
+    getMaxEventsNumber
 };
-/**
- * 
- */
-
 
 /*
     Gaze - user position

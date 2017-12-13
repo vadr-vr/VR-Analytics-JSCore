@@ -36,9 +36,9 @@ function getUnixTimeInMilliseconds(){
 }
 
 /**
- * Used to get seconds from milliseconds
+ * Used to get rounded seconds from milliseconds
  * @memberof Utils
- * @returns {number} duration in milliseconds
+ * @returns {number} seconds in integer
  */
 function convertMillisecondsToSeconds(milliseconds){
 
@@ -46,9 +46,21 @@ function convertMillisecondsToSeconds(milliseconds){
 
 }
 
+/**
+ * Used to get float seconds from milliseconds
+ * @memberof Utils
+ * @returns {number} seconds in float
+ */
+function convertMillisecondsToSecondsFloat(milliseconds){
+
+    return milliseconds / 1000;
+
+}
+
 export default {
     getToken,
     getUnixTimeInSeconds,
     getUnixTimeInMilliseconds,
-    convertMillisecondsToSeconds
+    convertMillisecondsToSeconds,
+    convertMillisecondsToSecondsFloat
 };

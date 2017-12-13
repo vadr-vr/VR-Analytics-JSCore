@@ -32,7 +32,6 @@ function getDeviceId(){
 
 }
 
-const registerTime = null;
 
 export default {
     getDeviceId

@@ -23,6 +23,17 @@ class Session{
     }
 
     /**
+     * Set or overwrite any extra key value pair
+     * @param {string} key
+     * @param {string} value
+     */
+    setExtra(key, value){
+
+        this.extra[key] = value;
+
+    }
+
+    /**
      * Start a new scene session 
      * @param {string} sceneId id of the new scene
      * @param {string} sceneName name of the new scene [optional]
@@ -96,10 +107,8 @@ class Session{
      * @param {object} extra extra information and filter key-value pairs in the event
      * @param {number} eventTime unix time in millisseconds when the event occurred
      * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
-     * @param {number} videoDuration videoDuraton in case of 360 video
      */
-    registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart, 
-        videoDuration){
+    registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart){
 
         if (this.currentScene == null){
             
@@ -109,7 +118,7 @@ class Session{
         }
 
         this.currentScene.registerEvent(eventName, position, extra, eventTime,
-            eventPlayTimeSinceStart, videoDuration);
+            eventPlayTimeSinceStart);
                 
     }
 

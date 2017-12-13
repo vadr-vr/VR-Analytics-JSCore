@@ -93,15 +93,13 @@ class SceneSession{
      * @param {object} extra extra information and filter key-value pairs in the event
      * @param {number} eventTime unix time in millisseconds when the event occurred
      * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
-     * @param {number} videoDuration videoDuraton in case of 360 video
      */
-    registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart, 
-        videoDuration){
+    registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart){
 
         if (this.currentMediaSession){
 
             const gameTime = eventPlayTimeSinceStart - this.sceneBeginTime;
-            this.currentMediaSession.registerEvent(eventName, position, extra, gameTime, eventTime, eventPlayTimeSinceStart, videoDuration);
+            this.currentMediaSession.registerEvent(eventName, position, extra, gameTime, eventTime, eventPlayTimeSinceStart);
 
         } else {
 

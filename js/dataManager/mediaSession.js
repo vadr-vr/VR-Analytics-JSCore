@@ -54,10 +54,9 @@ class MediaSession{
      * @param {number} gameTime time since start of scene when the event occurred
      * @param {number} eventTime unix time in milliseconds when the event occurred
      * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
-     * @param {number} videoDuration seek time of the video when event occurred [optional]
      */
     registerEvent(eventName, position, extra, gameTime, eventTime, 
-        eventPlayTimeSinceStart, videoDuration){
+        eventPlayTimeSinceStart){
 
         this.events.eventName.push(eventName);
         this.events.position.push(position);
@@ -68,8 +67,12 @@ class MediaSession{
         // calculate mediaDuration from eventPlayTimeSinceStart
         this.events.mediaDuration.push(eventPlayTimeSinceStart - this.mediaBeginTime);
 
-        if (this.type == 1)
-            this.events.videoDuration.push(videoDuration);
+        // fetch the video duration of the event
+        if (this.type == 1){
+
+            this.events.videoDuration.push(timeManager.getVideoDuration());
+
+        }
 
     }
 

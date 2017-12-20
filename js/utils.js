@@ -1,4 +1,4 @@
-import uuid from 'uuid';
+import uuid from 'uuid-js';
 /**
  * @module Utils
  * @description Contains utility functions
@@ -10,7 +10,9 @@ import uuid from 'uuid';
  * @returns {string} unique token
  */
 function getToken(){
-    return uuid.v4();
+
+    return uuid.create().hex;
+
 }
 
 /**
@@ -57,10 +59,40 @@ function convertMillisecondsToSecondsFloat(milliseconds){
 
 }
 
+/**
+ * Deep clones dictionary
+ * @memberof Utils
+ * @param {object} inputDict Dictionary to clone
+ * @returns {object} cloned dictionary
+ */
+function deepClone(inputDict){
+
+    const clonedDict = {};
+
+    for (let key in inputDict){
+
+        if (typeof(inputDict[key]) == 'object'){
+
+            clonedDict[key] = deepClone(inputDict[key]);
+        
+        }
+        else{
+
+            clonedDict[key] = inputDict[key];
+
+        }
+
+    }
+
+    return clonedDict;
+
+}
+
 export default {
     getToken,
     getUnixTimeInSeconds,
     getUnixTimeInMilliseconds,
     convertMillisecondsToSeconds,
-    convertMillisecondsToSecondsFloat
+    convertMillisecondsToSecondsFloat,
+    deepClone
 };

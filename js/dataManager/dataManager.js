@@ -15,12 +15,20 @@ import serverRequestManager from './serverRequestManager';
  * @private
  */
 let currentSession = null;
+let mediaPlaying = false;
 let eventDataPairs = 0;
 
 let lastRequestTime = null;
 let timeSinceRequestChecker = null;
+/**
+ * Init the collection of data
+ * @memberof DataManager
+ */
+function init(){
 
-_createSession();
+    _createSession();
+
+}
 
 // Functions related to creating and deleting scene sessions and media sessions
 /**
@@ -56,6 +64,7 @@ function closeScene(){
  */
 function addMedia(mediaId, name, type, url){
     
+    mediaPlaying = true;
     currentSession.addMedia(mediaId, name, type, url);
 
 }
@@ -66,14 +75,21 @@ function addMedia(mediaId, name, type, url){
  */
 function closeMedia(){
     
+    mediaPlaying = false;
     currentSession.closeMedia();
 
 }
 
 /**
- * create media session
+ * Retuns the media state, true is media is playing, false if media is not playing
  * @memberof DataManager
+ * @returns {boolean} media state
  */
+function getMediaState(){
+
+    return mediaPlaying;
+
+}
 
 /**
  * Adds event to event list of media if it exists, else to its own events list
@@ -148,7 +164,7 @@ function _createDataRequest(){
     logger.info('creating data request');
     const currentSessionData = currentSession.getDictionary();
     serverRequestManager.addDataRequest(currentSessionData);
-
+    
     currentSession = currentSession.getDuplicate();
     lastRequestTime = utils.getUnixTimeInSeconds();
 
@@ -172,10 +188,12 @@ function _checkDataPairs(){
 }
 
 export default {
+    init,
     registerEvent,
     destroy,
     addScene, 
     closeScene,
     addMedia, 
-    closeMedia
+    closeMedia,
+    getMediaState
 };

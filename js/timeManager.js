@@ -16,6 +16,7 @@ let frameUnixTime = null;
  * @private
  */
 let frameDuration = 0;
+let frameDurationClone = 0;
 /**
  *  time in milliseconds of app use time ie. exluding window switches, headset removed etc.
  * @memberof TimeManager
@@ -33,6 +34,16 @@ let videoDuration = 0;
 let videoPlaying = false;
 
 /**
+ * Init the time manager, sets frameUnixTime to current value
+ * @memberof TimeManager
+ */
+function init(){
+
+    frameUnixTime = utils.getUnixTimeInMilliseconds();
+
+}
+
+/**
  * Updates the application timings.
  * Calculates frameTime as the difference of current 
  * frame time and the previous frame time. In case app was not active the previous frame,
@@ -41,18 +52,26 @@ let videoPlaying = false;
  * @param {number} unixTime unix time of the current frame
  * @param {boolean} appActive specifies if the app was in focus during the last frame
  * @param {boolean} appPlaying specifies if the app is playing or  paused
+ * @param {number} frameTime specify the frameDuration if known [optional]
  */
-function setApplicationTimes(unixTime, appActive, appPlaying){
+function setApplicationTimes(unixTime, appActive, appPlaying, frameTime){
 
-    frameDuration = appActive ? unixTime - frameUnixTime : 0;
+    if (frameTime)
+        frameDuration = frameTime;
+    else
+        frameDuration = unixTime - frameUnixTime;
+    
+    // dont consider frame duration if app is not active
+    frameDurationClone = appActive ? frameDuration : 0;
+
     frameUnixTime = unixTime;
-    timeSinceStart += frameDuration;
-    playTimeSinceStart = appPlaying ? playTimeSinceStart + frameDuration : 
+    timeSinceStart += frameDurationClone;
+    playTimeSinceStart = appPlaying ? playTimeSinceStart + frameDurationClone : 
         playTimeSinceStart;
 
     if (videoPlaying){
 
-        videoDuration += utils.convertMillisecondsToSecondsFloat(frameDuration);
+        videoDuration += utils.convertMillisecondsToSecondsFloat(frameDurationClone);
 
     }
 
@@ -161,6 +180,16 @@ function setVideoDuration(newSeek){
 }
 
 /**
+ * Gets the video play state, true if playing, false if not playing or paused
+ * @memberof TimeManager
+ */
+function getVideoState(){
+
+    return videoPlaying;
+
+}
+
+/**
  * Get the current seek position of the playing video
  * @memberof TimeManager
  */
@@ -171,6 +200,7 @@ function getVideoDuration(){
 }
 
 export default {
+    init,
     setApplicationTimes,
     reset,
     getFrameUnixTime,
@@ -182,5 +212,6 @@ export default {
     pauseVideo, 
     stopVideo,
     setVideoDuration, 
-    getVideoDuration
+    getVideoDuration,
+    getVideoState
 };

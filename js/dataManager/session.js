@@ -15,7 +15,7 @@ class Session{
 
         this.token = utils.getToken();
         this.time = timeManager.getFrameUnixTime();
-        this.extra = extra;
+        this.extra = utils.deepClone(extra);
 
         this.scenes = [];
         this.currentScene = null;
@@ -167,6 +167,8 @@ class Session{
             newSession.scenes.push(newSession.currentScene);
 
         }
+
+        return newSession;
 
     }
 

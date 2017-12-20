@@ -1,3 +1,4 @@
+import utils from './utils';
 /**
  * @module ApplicationConfig
  * @description Contains the application specific information such as App id, token, 
@@ -8,34 +9,62 @@ let testMode = false;
 let dataPostTimeInterval = 30;
 let dataPostMaxEvents = 1000;
 
-const applicationConfig = {
+let sdkType = 'vadrCore';
+
+const appConfig = {
     'appId': '',
     'appToken': '',
     'version': ''
 };
 
-const dataConfig = {
-    'Gaze': {
-        'timePeriod': 200,
-        'status': true,
-        'events': ['vadrGaze', 'vadrMedia Gaze']
-    },
-    'Orientation': {
-        'timePeriod': 200,
-        'status': true,
-        'events': ['vadrPosition', 'vadrMedia Position']
-    },
-    'Performance': {
-        'timePeriod': 200,
-        'status': true,
-        'events': ['FPS', 'CPU Usage', 'Memory ResidentUsage', 'Memory SwapUsage']
-    },
-    'TrackObjects': {
-        'timePeriod': 200,
-        'status': true,
-        'events': ['vadrObject Gaze', 'vadrObject Focus']
-    }
-};
+/**
+ * Sets the application details such as appId, appToken, version
+ * @memberof ApplicationConfig
+ * @param {string} appId application id provided by vadr
+ * @param {token} token application token provided by vadr
+ * @param {version} version version of application set by developer
+ */
+function setApplication(appId, token, version){
+
+    appConfig['appId'] = appId;
+    appConfig['appToken'] = token;
+    appConfig['version'] = version;
+
+}
+
+/**
+ * @memberof ApplicationConfig
+ * Returns the application config set by user
+ * @returns {object} cloned version of application config dict
+ */
+function getApplicationConfig(){
+
+    if (appConfig['appId'] && appConfig['appToken'] && appConfig['version'])
+        return utils.deepClone(appConfig);
+    else 
+        return null;
+
+}
+
+/**
+ * @memberof ApplicationConfig
+ * Sets the SDK type used by the application. Set by the platform implementation
+ * @param {string} sdk sdk type
+ */
+function setSdkType(sdk){
+
+    sdkType = sdk;
+
+}
+
+/**
+ * Returns the platform SDK is used for
+ */
+function getSdkType(){
+
+    return sdkType;
+
+}
 
 /**
  * Sets the test mode of the application
@@ -84,40 +113,12 @@ function getMaxEventsNumber(){
 }
 
 export default {
+    setApplication,
+    setSdkType,
     setTestMode,
+    getApplicationConfig,
+    getSdkType,
     getTestMode,
     getDataPostTimeInterval,
     getMaxEventsNumber
 };
-
-/*
-    Gaze - user position
-        'vadrGaze'
-        'vadrMedia Gaze' - 
-            'Status' : 'Paused'
-
-    Orientation - user position
-        'vadrPosition'
-        'vadrMedia Position'
-            for both
-            'Time'
-            'Velocity X'
-            'Velocity Y'
-            'Velocity Z'
-
-    Performance - user position
-        'vadrPerformance'
-            'FPS'
-            'Cpu Usage'
-            'Memory ResidentUsage'
-            'Memory SwapUsage'
-
-    Track Objects
-        'vadrObject Gaze' - position is the intersect of raycast on object
-            'Time'
-            Filter 'Object' - 'object name'
-        'vadrObject Focus' - position of the user
-            'Focus'
-            Filter 'Object' - 'object name'
-
-*/

@@ -5,7 +5,7 @@
  * 4 - Log everything including debug  
  */
 
-let logLevel = 1;
+let logLevel = 4;
 
 const consoleError = console.error.bind(console, 'Vadr Analytics:');
 const consoleWarn = console.warn.bind(console, 'Vadr Analytics:');

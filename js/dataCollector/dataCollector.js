@@ -135,6 +135,7 @@ function tick(){
             playTimeSinceStart - infoDict.lastFetchTime > infoDict.timePeriod){
 
             const timeDifferene = playTimeSinceStart - infoDict.lastFetchTime;
+
             if (useMedia)
                 _setEvents(infoDict.calculator.getMediaEvents(timeDifferene));
             else

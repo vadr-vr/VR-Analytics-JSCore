@@ -208,8 +208,12 @@ function destroy(){
 function _createSession(){
 
     // can also check if any ealier session can be used
-    currentSession = new session({});
-    lastRequestTime = utils.getUnixTimeInSeconds();
+    if (!currentSession){
+        
+        currentSession = new session({});
+        lastRequestTime = utils.getUnixTimeInSeconds();
+        
+    }
 
     // checks if time since last request has exceeded the maximum request time
     timeSinceRequestChecker = setInterval(

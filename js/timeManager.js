@@ -4,31 +4,20 @@ import utils from './utils';
  * @description Manages the different timings in the web application
  */
 
-/**
- * unix time of the current frame
- * @memberof TimeManager
- * @private
- */ 
+// unix time of the current frame
 let frameUnixTime = null;
-/**
- *  previous frame duration in milliseconds
- * @memberof TimeManager
- * @private
- */
+// previous frame duration in milliseconds
 let frameDuration = 0;
 let frameDurationClone = 0;
-/**
- *  time in milliseconds of app use time ie. exluding window switches, headset removed etc.
- * @memberof TimeManager
- * @private
- */
+// time in milliseconds of app use time ie. exluding window switches, headset removed etc.
 let timeSinceStart = 0; 
-/**
- *  time in milliseconds of actual use time ie. also excluding app pauses, menu toggles etc.
- * @memberof TimeManager
- * @private
- */
+// time in milliseconds of actual use time ie. also excluding app pauses, menu toggles etc
 let playTimeSinceStart = 0;
+// tells if application is in focus
+let appActive = true;
+// tells if headset is put off in case of VR etc.
+let appPlaying = true;
+let removeHeadsetPausesPlay = true;
 
 let videoDuration = 0;
 let videoPlaying = false;
@@ -40,6 +29,14 @@ let videoPlaying = false;
 function init(){
 
     frameUnixTime = utils.getUnixTimeInMilliseconds();
+    frameDuration = 0;
+    frameDurationClone = 0;
+    timeSinceStart = 0;
+    playTimeSinceStart = 0;
+    appActive = true;
+    appPlaying = true;
+    videoDuration = 0;
+    videoPlaying = false;
 
 }
 
@@ -50,11 +47,9 @@ function init(){
  * sets the frame time to 0. Correspondingly calculates timeSinceStart and 
  * playTimeSinceStart 
  * @memberof TimeManager
- * @param {boolean} appActive specifies if the app was in focus during the last frame
- * @param {boolean} appPlaying specifies if the app is playing or  paused
  * @param {number} frameTime specify the frameDuration if known [optional]
  */
-function setApplicationTimes(appActive, appPlaying, frameTime){
+function setApplicationTimes(frameTime){
 
     let newFrameUnixTime = utils.getUnixTimeInMilliseconds();
     if (frameTime)
@@ -77,6 +72,49 @@ function setApplicationTimes(appActive, appPlaying, frameTime){
     if (videoPlaying){
 
         videoDuration += utils.convertMillisecondsToSecondsFloat(frameDurationClone);
+
+    }
+
+
+}
+
+/**
+ * toggle appActive flag
+ * @memberof TimeManager
+ */
+function setAppActive(newState){
+
+    appActive = !!newState;
+
+}
+
+/**
+ * toggle if removing headset pauses play time
+ * @memberof TimeManager
+ * @param {boolean} newState true if play is to be paused on removing headset, else false
+ */
+function setRemoveHeadsetPausesPlay(newState){
+
+    removeHeadsetPausesPlay = !!newState;
+
+}
+
+/**
+ * toggle headset put on / removed
+ * @memberof TimeManager
+ * @param {boolean} newState new headset state, true id put on, false if taken off
+ */
+function setHeadsetState(newState){
+
+    if (newState){
+
+        appPlaying = true;
+        appActive = true;
+
+    }else{
+
+        if (removeHeadsetPausesPlay)
+            appPlaying = false;
 
     }
 
@@ -230,6 +268,10 @@ export default {
     init,
     setApplicationTimes,
     reset,
+    setAppActive,
+    setRemoveHeadsetPausesPlay,
+    setHeadsetState,
+
     getFrameUnixTime,
     getFrameDuration,
     getFrameDurationSeconds,

@@ -128,6 +128,7 @@ function _makeRequestToServer(){
                 // });
 
             });
+        _makeRequestToServer();
 
     }).catch(() => {
 

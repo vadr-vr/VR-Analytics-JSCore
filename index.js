@@ -25,12 +25,12 @@ function initVadRAnalytics(){
 
 function tick(time, timeDelta){
 
-    timeManager.setApplicationTimes(true, true, timeDelta);
+    timeManager.setApplicationTimes(timeDelta);
     dataCollector.tick();
 
 }
 
-function destroyVadRAnalytics(){
+function destroy(){
 
     dataManager.destroy();
 
@@ -39,7 +39,7 @@ function destroyVadRAnalytics(){
 
 export default {
     initVadRAnalytics,
-    destroyVadRAnalytics,
+    destroy,
     setLogLevel: logger.setLogLevel,
     config: {
         setApplication: config.setApplication,
@@ -50,6 +50,17 @@ export default {
     user: {
         setUserId: userId => {user.setUserId(userId, true);},
         setInfo: user.setExtraInfo
+    },
+    setDataConfig: {
+        orientation: (status, timePeriod) => {
+            dataCollector.configureEventCollection('Orientation', status, timePeriod);
+        },
+        gaze: (status, timePeriod) => {
+            dataCollector.configureEventCollection('Gaze', status, timePeriod);
+        },
+        performance: (status, timePeriod) => {
+            dataCollector.configureEventCollection('Performance', status, timePeriod);
+        }
     },
     dataCallbacks: {
         setPositionCallback: dataCollector.setPositionCallback,
@@ -67,5 +78,13 @@ export default {
         dataManager.registerEvent(eventName, position, extra,
             timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
 
+    },
+    playState: {
+        appOutOfFocus: () => {timeManager.setAppActive(false);},
+        appInFocus: () => {timeManager.setAppActive(true);},
+        headsetRemoved: () => {timeManager.setHeadsetState(false);},
+        headsetApplied: () => {timeManager.setHeadsetState(true);},
+        pauseOnHeadsetRemove: () => {timeManager.setRemoveHeadsetPausesPlay(true);},
+        dontPauseOnHeadsetRemove: () => {timeManager.setRemoveHeadsetPausesPlay(false);}
     }
 };

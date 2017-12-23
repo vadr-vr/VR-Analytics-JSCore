@@ -10,32 +10,38 @@ import timeManager from '../timeManager';
  * @description Manages the collection of default events
  */
 
+const callbacks = {
+    positionCallback: null,
+    gazeCallback: null,
+    angleCallback: null
+};
+
 // contains the default events that can be collected
 const gazeDict = {
     'timePeriod': 200,
     'lastFetchTime': 0,
-    'status': false,
+    'status': true,
     'calculator': gazeCollector
 };
 
 const orientationDict = {
     'timePeriod': 200,
     'lastFetchTime': 0,
-    'status': false,
+    'status': true,
     'calculator': orientationCollector
 };
 
 const performanceDict = {
     'timePeriod': 200,
     'lastFetchTime': 0,
-    'status': false,
+    'status': true,
     'calculator': performanceCollector
 };
 
 const dataConfig = {
     'Gaze': gazeDict,
     'Orientation': orientationDict,
-    'Performance': performanceDict,
+    'Performance': performanceDict
 };
 
 /**
@@ -43,10 +49,14 @@ const dataConfig = {
  * @memberof DataCollector
  * @param {function} positionFunction  
  */
-function setCallbackPosition(positionFunction){
+function setPositionCallback(positionFunction){
 
-    if (typeof(positionFunction) == 'function')
+    if (typeof(positionFunction) == 'function'){
+
         orientationCollector.setPositionCallback(positionFunction);
+        callbacks.positionCallback = positionFunction;
+
+    }
     else
         logger.warn('Trying to set a non function object as position callback');
 
@@ -57,10 +67,14 @@ function setCallbackPosition(positionFunction){
  * @memberof DataCollector
  * @param {function} gazeFunction 
  */
-function setCallbackGaze(gazeFunction){
+function setGazeCallback(gazeFunction){
 
-    if (typeof(gazeFunction) == 'function')
+    if (typeof(gazeFunction) == 'function'){
+
         gazeCollector.setGazeCallback(gazeFunction);
+        callbacks.gazeCallback = gazeFunction;
+
+    }
     else
         logger.warn('Trying to set a non function object as gaze callback');
     
@@ -71,10 +85,14 @@ function setCallbackGaze(gazeFunction){
  * @memberof DataCollector
  * @param {function} angleFunction 
  */
-function setCallbackAngle(angleFunction){
+function setAngleCallback(angleFunction){
 
-    if (typeof(angleFunction) == 'function')
+    if (typeof(angleFunction) == 'function'){
+
         gazeCollector.setAngleCallback(angleFunction);
+        callbacks.angleCallback = angleFunction;
+
+    }
     else
         logger.warn('Trying to set a non function object as angle callback');
     
@@ -83,9 +101,9 @@ function setCallbackAngle(angleFunction){
 /**
  * Configures which events to collect by default and by what frequency
  * @memberof DataCollector
- * @param {*} eventType 
- * @param {*} collectionStatus 
- * @param {*} timePeriod 
+ * @param {string} eventType type of event - Orientation, Gaze, Performance
+ * @param {boolean} collectionStatus set to true if you want to collect the event
+ * @param {number} timePeriod time period in milliseconds after which to collect the data
  */
 function configureEventCollection(eventType, collectionStatus, timePeriod){
 
@@ -104,6 +122,8 @@ function configureEventCollection(eventType, collectionStatus, timePeriod){
  */
 function tick(){
 
+    performanceCollector.tick();
+
     const useMedia = dataManager.getMediaState();
     const playTimeSinceStart = timeManager.getPlayTimeSinceStart();
 
@@ -114,12 +134,13 @@ function tick(){
         if (infoDict.status && 
             playTimeSinceStart - infoDict.lastFetchTime > infoDict.timePeriod){
 
-            infoDict.lastFetchTime = playTimeSinceStart;
-
+            const timeDifferene = playTimeSinceStart - infoDict.lastFetchTime;
             if (useMedia)
-                _setEvents(infoDict.calculator.getMediaEvents());
+                _setEvents(infoDict.calculator.getMediaEvents(timeDifferene));
             else
-                _setEvents(infoDict.calculator.getEvents());
+                _setEvents(infoDict.calculator.getEvents(timeDifferene));
+                
+            infoDict.lastFetchTime = playTimeSinceStart;
 
         }
 
@@ -134,16 +155,17 @@ function _setEvents(eventsArray){
 
         let event = eventsArray[i];
         dataManager.registerEvent(event[0], event[1], event[2], 
-            timeManager.getFrameUnixTime, timeManager.getPlayTimeSinceStart);
+            timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
 
     }
 
 }
 
 export default {
-    setCallbackPosition,
-    setCallbackGaze,
-    setCallbackAngle,
+    setPositionCallback,
+    setGazeCallback,
+    setAngleCallback,
+    callbacks,
     configureEventCollection,
     tick
 };

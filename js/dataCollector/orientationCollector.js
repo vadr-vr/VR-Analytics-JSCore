@@ -16,6 +16,7 @@ import timeManager from '../timeManager';
 
 
 let positionCallback = null;
+let currentPosition = null;
 
 /**
  * Sets the position callback
@@ -38,16 +39,16 @@ function getEvents(){
         return [];
     }
 
-    let position = positionCallback();
+    currentPosition = positionCallback();
 
     const extra = {
         'ik': ['time'],
-        'iv': [timeManager.getFrameDuration()],
+        'iv': [timeManager.getFrameDurationSeconds()],
         'fk': [],
         'fv': []
     };
 
-    return [['vadrPosition', position, extra]];
+    return [['vadrPosition', currentPosition, extra]];
 
 }
 
@@ -57,10 +58,20 @@ function getMediaEvents(){
 
 }
 
+/**
+ * @memberof OrientationCollector
+ * Fetch the position calculated in current frame. 
+ */
+function getCurrentPosition(){
+
+    return currentPosition;
+
+}
 
 
 export default {
     setPositionCallback,
+    getCurrentPosition,
     getEvents,
     getMediaEvents
 };

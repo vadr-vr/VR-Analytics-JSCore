@@ -2,6 +2,8 @@ import logger from '../logger';
 import utils from '../utils';
 import session from './session';
 import config from '../config';
+import timeManager from '../timeManager';
+import dataCollector from '../dataCollector/dataCollector';
 import serverRequestManager from './serverRequestManager';
 
 /**
@@ -65,6 +67,7 @@ function closeScene(){
 function addMedia(mediaId, name, type, url){
     
     mediaPlaying = true;
+    timeManager.playVideo();
     currentSession.addMedia(mediaId, name, type, url);
 
 }
@@ -76,7 +79,74 @@ function addMedia(mediaId, name, type, url){
 function closeMedia(){
     
     mediaPlaying = false;
+    timeManager.stopVideo();
     currentSession.closeMedia();
+
+}
+
+function playMedia(){
+
+    let userPosition = '';
+    if (dataCollector.callbacks.positionCallback){
+
+        userPosition = dataCollector.callbacks.positionCallback();
+
+    }
+
+    registerEvent('vadrMedia Play', userPosition,
+        {
+            'ik': [],
+            'iv': [],
+            'fk': [],
+            'fv': []
+        },
+        timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
+
+    timeManager.playVideo();
+
+}
+
+function pauseMedia(){
+
+    let userPosition = '';
+    if (dataCollector.callbacks.positionCallback){
+
+        userPosition = dataCollector.callbacks.positionCallback();
+
+    }
+
+    registerEvent('vadrMedia Pause', userPosition,
+        {
+            'ik': [],
+            'iv': [],
+            'fk': [],
+            'fv': []
+        }, 
+        timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
+
+    timeManager.pauseVideo();
+
+}
+
+function changeSeek(newSeek){
+
+    let userPosition = '';
+    if (dataCollector.callbacks.positionCallback){
+
+        userPosition = dataCollector.callbacks.positionCallback();
+
+    }
+
+    registerEvent('vadrMedia Pause', userPosition,
+        {
+            'ik': ['oldSeek', 'newSeek'],
+            'iv': [timeManager.getVideoDuration(), newSeek],
+            'fk': [],
+            'fv': []
+        },
+        timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
+
+    timeManager.setVideoDuration(newSeek);
 
 }
 
@@ -105,7 +175,6 @@ function registerEvent(eventName, position, extra, eventTime, eventPlayTimeSince
     currentSession.registerEvent(eventName, position, extra, eventTime,
         eventPlayTimeSinceStart);
 
-    
     // check size of events and handle making request
     _checkDataPairs();
     
@@ -117,6 +186,8 @@ function registerEvent(eventName, position, extra, eventTime, eventPlayTimeSince
  * @private
  */
 function destroy(){
+
+    _createDataRequest();
 
     if (timeSinceRequestChecker){
 
@@ -193,7 +264,12 @@ export default {
     destroy,
     addScene, 
     closeScene,
-    addMedia, 
-    closeMedia,
+    media: {
+        addMedia: addMedia, 
+        closeMedia: closeMedia,
+        playMedia: playMedia,
+        pauseMedia: pauseMedia, 
+        changeSeek: changeSeek
+    },
     getMediaState
 };

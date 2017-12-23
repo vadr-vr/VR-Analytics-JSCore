@@ -1,3 +1,4 @@
+import orientationCollector from './orientationCollector';
 //TODO
 // Performance - user position
 // 'vadrPerformance'
@@ -14,36 +15,55 @@
 //     'Focus'
 //     Filter 'Object' - 'object name'
 
-event= [{
-    'name': 'FPS',
-    'status': true,
-    'callback': null
-},
-{
-    'name': 'CPU Usage',
-    'status': false,
-    'callback': null
-},
-{
-    'name': 'Memory ResidentUsage',
-    'status': false,
-    'callback': null
-},
-{
-    'name': 'Memory SwapUsage',
-    'status': false,
-    'callback': null
-}];
+// const eventsDict= [{
+//     'name': 'FPS',
+//     'status': true,
+//     'callback': null
+// }];
 
-function getEvents(){
+let framesTillNow = 0;
+
+function _getEvents(duration){
+
+    const currentPosition = orientationCollector.getCurrentPosition();
+
+    if (!currentPosition)
+        return [];
+
+    let fps = parseInt(1000 * framesTillNow / duration);
+    framesTillNow = 0;
+
+    const extra = {
+        'ik': ['FPS'],
+        'iv': [fps],
+        'fk': [],
+        'fv': []
+    };
+
+    return [['vadrPerformance', orientationCollector.getCurrentPosition(), extra]];
+
+}   
+
+function getEvents(duration){
+
+    return _getEvents(duration);
 
 }
 
-function getMediaEvents(){
+function getMediaEvents(duration){
+
+    return _getEvents(duration);
+
+}
+
+function tick(){
+
+    framesTillNow++;
 
 }
 
 export default {
     getEvents,
-    getMediaEvents
+    getMediaEvents,
+    tick
 };

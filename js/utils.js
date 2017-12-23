@@ -4,6 +4,18 @@ import uuid from 'uuid-js';
  * @description Contains utility functions
  */
 
+let vadrDate = Date;
+
+if (!vadrDate.now){
+
+    vadrDate.now = function(){
+
+        return (new Date()).getTime();
+
+    };
+
+}
+
 /**
  * Used to generate session, sceneSession or mediaSession tokens
  * @memberof Utils
@@ -22,7 +34,7 @@ function getToken(){
  */
 function getUnixTimeInSeconds(){
 
-    return Math.round((new Date()).getTime() / 1000);
+    return Math.round(vadrDate.now() / 1000);
 
 }
 
@@ -33,7 +45,7 @@ function getUnixTimeInSeconds(){
  */
 function getUnixTimeInMilliseconds(){
     
-    return (new Date()).getTime();
+    return vadrDate.now();
 
 }
 

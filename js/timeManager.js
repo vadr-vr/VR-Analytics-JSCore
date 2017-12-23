@@ -47,27 +47,32 @@ function init(){
  * Updates the application timings.
  * Calculates frameTime as the difference of current 
  * frame time and the previous frame time. In case app was not active the previous frame,
- * sets the frame time to 0. Correspondingly calculates timeSinceStart and playTimeSinceStart 
+ * sets the frame time to 0. Correspondingly calculates timeSinceStart and 
+ * playTimeSinceStart 
  * @memberof TimeManager
- * @param {number} unixTime unix time of the current frame
  * @param {boolean} appActive specifies if the app was in focus during the last frame
  * @param {boolean} appPlaying specifies if the app is playing or  paused
  * @param {number} frameTime specify the frameDuration if known [optional]
  */
-function setApplicationTimes(unixTime, appActive, appPlaying, frameTime){
+function setApplicationTimes(appActive, appPlaying, frameTime){
 
+    let newFrameUnixTime = utils.getUnixTimeInMilliseconds();
     if (frameTime)
         frameDuration = frameTime;
     else
-        frameDuration = unixTime - frameUnixTime;
+        frameDuration = newFrameUnixTime - frameUnixTime;
     
     // dont consider frame duration if app is not active
     frameDurationClone = appActive ? frameDuration : 0;
 
-    frameUnixTime = unixTime;
+    frameUnixTime = newFrameUnixTime;
     timeSinceStart += frameDurationClone;
-    playTimeSinceStart = appPlaying ? playTimeSinceStart + frameDurationClone : 
-        playTimeSinceStart;
+
+    if (appPlaying){
+
+        playTimeSinceStart += frameDurationClone;
+        
+    }
 
     if (videoPlaying){
 
@@ -105,11 +110,22 @@ function getFrameUnixTime(){
 /**
  * Get the previous frame duration
  * @memberof TimeManager
- * @returns {number} duration of the previous frame
+ * @returns {number} duration of the previous frame in milliseconds
  */
 function getFrameDuration(){
     
     return frameDuration;
+
+}
+
+/**
+ * Get the previous frame duration
+ * @memberof TimeManager
+ * @returns {number} duration of the previous frame in seconds
+ */
+function getFrameDurationSeconds(){
+    
+    return parseInt(frameDuration) / 1000;
 
 }
 
@@ -132,6 +148,17 @@ function getTimeSinceStart(){
 function getPlayTimeSinceStart(){
     
     return playTimeSinceStart;
+
+}
+
+/**
+ * Get actual play time since start in seconds
+ * @memberof TimeManager
+ * @returns {number}  
+ */
+function getPlayTimeSinceStartSeconds(){
+    
+    return parseInt(playTimeSinceStart) / 1000;
 
 }
 
@@ -205,8 +232,10 @@ export default {
     reset,
     getFrameUnixTime,
     getFrameDuration,
+    getFrameDurationSeconds,
     getTimeSinceStart,
     getPlayTimeSinceStart,
+    getPlayTimeSinceStartSeconds,
 
     playVideo,
     pauseVideo, 

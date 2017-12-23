@@ -117,7 +117,7 @@ class SceneSession{
     getDictionary(){
 
         const sceneSessionDictionary = {
-            'sceneId': this.mediaId,
+            'sceneId': this.sceneId,
             'startTime': utils.convertMillisecondsToSeconds(this.startTime),
             'sceneToken': this.token,
             'events': this.events,

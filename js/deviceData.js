@@ -9,11 +9,7 @@ import utils from './utils';
  */
 
 const deviceInfo = {
-    'deviceId': '',
-    'language': '',
-    'os': '',
-    'osv': '',
-    'userAgent': ''
+    'deviceId': null,
 };
 
 const userAgent = navigator.userAgent;
@@ -73,7 +69,6 @@ function _getSetDeviceIdentifier(){
 function _getVadrDeviceFromCookie(){
 
     const deviceCookieName = constants.deviceCookieName;
-    const deviceCookieLength = deviceCookieName.length;
     const allCookies = document.cookie;
 
     if (allCookies.indexOf(deviceCookieName) == -1)
@@ -85,8 +80,26 @@ function _getVadrDeviceFromCookie(){
 
         const cookieString = cookieList[i].replace(/\s/g, '');
 
-        if (cookieString.substring(0, deviceCookieLength) == deviceCookieName)
-            return cookieString.split('=')[1];
+        if (cookieString.startsWith(deviceCookieName)){
+
+            let separatorIndex= cookieString.indexOf('=');
+
+            if (separatorIndex > 0){
+
+                const deviceId = cookieString.substring(separatorIndex + 1);
+                
+                if (deviceId)
+                    return deviceId;
+                else 
+                    return null;
+
+            } else {
+
+                return null;
+
+            }
+
+        }
 
     }
 
@@ -114,6 +127,7 @@ function _setVadrDeviceCookie(){
     return deviceId;
 
 }
+
 /**
  * Returns the deviceId of the device
  * @memberof DeviceData

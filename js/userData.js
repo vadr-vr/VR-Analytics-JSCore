@@ -6,7 +6,7 @@ import deviceData from './deviceData';
  * Until userId id is set, device id is used in its place.
  */
 
-let userId = '';
+let userId = null;
 let extraInfo = {};
 
 /**
@@ -46,7 +46,7 @@ function getUserDictionary(){
     
     const userDict = {};
 
-    if (userId == ''){
+    if (!userId){
 
         userDict['userId'] = deviceData.getDeviceId();
 

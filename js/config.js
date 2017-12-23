@@ -12,9 +12,9 @@ let dataPostMaxEvents = 1000;
 let sdkType = 'vadrCore';
 
 const appConfig = {
-    'appId': '',
-    'appToken': '',
-    'version': ''
+    'appId': null,
+    'appToken': null,
+    'version': null
 };
 
 /**
@@ -74,8 +74,7 @@ function getSdkType(){
  */
 function setTestMode(test){
 
-    test == !!test;
-    testMode = test;
+    testMode = !!test;
 
 }
 
@@ -113,6 +112,11 @@ function getMaxEventsNumber(){
 }
 
 export default {
+    getApplication: {
+        id: () => appConfig.appId,
+        token: () => appConfig.appToken,
+        version: () => appConfig.version
+    },
     setApplication,
     setSdkType,
     setTestMode,

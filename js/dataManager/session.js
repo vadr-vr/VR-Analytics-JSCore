@@ -131,10 +131,14 @@ class Session{
         const sessionDicitonary = {
             'token': this.token,
             'time': utils.convertMillisecondsToSeconds(this.time),
-            'test': applicationConfig.getTestMode(),
             'extra': this.extra,
             'scenes': []
         };
+
+        if (applicationConfig.getTestMode())
+            sessionDicitonary['test'] = 'true';
+        else 
+            sessionDicitonary['test'] = 'false';
 
         sessionDicitonary['extra']['user'] = userData.getUserDictionary();
 

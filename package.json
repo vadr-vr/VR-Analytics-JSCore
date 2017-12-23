@@ -14,8 +14,10 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/abhishekbansal1993/vadrjscore#readme",
   "dependencies": {
-    "axios": "^0.16.0",
-    "uuid": "^2.0.2"
+    "pouchdb-browser": "^6.4.1",
+    "superagent": "^3.8.2",
+    "ua-parser-js": "^0.7.17",
+    "uuid-js": "^0.7.5"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

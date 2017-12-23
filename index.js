@@ -16,10 +16,6 @@ import dataCollector from './js/dataCollector/dataCollector';
  */
 logger.setLogLevel(4);
 
-function sayHi(){
-    logger.info('VadR says Hii');
-}
-
 function initVadRAnalytics(){
 
     timeManager.init();
@@ -27,10 +23,23 @@ function initVadRAnalytics(){
 
 }
 
+function tick(time, timeDelta){
+
+    timeManager.setApplicationTimes(true, true, timeDelta);
+    dataCollector.tick();
+
+}
+
+function destroyVadRAnalytics(){
+
+    dataManager.destroy();
+
+}
+
 
 export default {
-    sayHi,
     initVadRAnalytics,
+    destroyVadRAnalytics,
     setLogLevel: logger.setLogLevel,
     config: {
         setApplication: config.setApplication,
@@ -47,14 +56,16 @@ export default {
         setGazeCallback: dataCollector.setGazeCallback,
         setAngleCallback: dataCollector.setAngleCallback
     },
-    media: {
-        start: null,
-        play: null,
-        pause: null,
-        seekVideo: null
+    tick,
+    media: dataManager.media,
+    scene: {
+        addScene: dataManager.addScene,
+        closeScene: dataManager.closeScene
     },
-    event: {
-        setEvent: null
-    } 
+    registerEvent: (eventName, position, extra) => {
+        
+        dataManager.registerEvent(eventName, position, extra,
+            timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
 
+    }
 };

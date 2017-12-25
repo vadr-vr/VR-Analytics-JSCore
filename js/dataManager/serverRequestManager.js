@@ -13,6 +13,7 @@ import device from '../deviceData';
  */
 
 // const vadrDb = new pouchDb('vadrAnalyticsDb');
+window.requestArray = [];
 const dataRequests = [];
 let requestingPost = false;
 let failedRequestTimeout = null;
@@ -24,10 +25,11 @@ let failedRequestTimeout = null;
  */
 function addDataRequest(requestDict){
 
-    logger.info('Request to send data to server');
+    logger.info('Adding request to server');
 
     const dataRequest = _getServerRequest(requestDict);
-    logger.debug('Request data is \n', dataRequest);
+    logger.debug('Request data', dataRequest);
+    window.requestArray.push(dataRequest);
     _addRequestToDb(dataRequest).then(() => {
 
         if (!requestingPost)
@@ -111,21 +113,20 @@ function _makeRequestToServer(){
             .catch(function(error){
                 
                 console.log('server error ', error);
-                _makeRequestToServer();
-                // requestingPost = false;
-                // _addRequestToDb(request_data).then(() => {
+                requestingPost = false;
+                _addRequestToDb(request_data).then(() => {
 
-                //     failedRequestTimeout = setTimeout(() => {
+                    failedRequestTimeout = setTimeout(() => {
     
-                //         if (!requestingPost){
+                        if (!requestingPost){
     
-                //             _makeRequestToServer();
+                            _makeRequestToServer();
     
-                //         }
+                        }
                     
-                //     }, 10000);
+                    }, 10000);
 
-                // });
+                });
 
             });
         _makeRequestToServer();

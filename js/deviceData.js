@@ -47,8 +47,6 @@ if (deviceDetails.browser){
 
 _getSetDeviceIdentifier();
 
-logger.debug('Device info is', deviceInfo);
-
 /**
  * Tries to fetch deviceId from cookie, else set a new cookie
  * @private
@@ -129,6 +127,16 @@ function _setVadrDeviceCookie(){
 }
 
 /**
+ * Perform any functions needed after vadrAnalytics is initialized
+ * @memberof DeviceData
+ */
+function init(){
+
+    logger.debug('Device info is', deviceInfo);
+    
+}
+
+/**
  * Returns the deviceId of the device
  * @memberof DeviceData
  * @returns {string} deviceId 
@@ -151,6 +159,7 @@ function getDeviceInformation(){
 }
 
 export default {
+    init,
     getDeviceId,
     getDeviceInformation
 };

@@ -1,4 +1,5 @@
 import utils from './utils';
+import dataCollector from './dataCollector/dataCollector';
 /**
  * @module TimeManager
  * @description Manages the different timings in the web application
@@ -49,7 +50,7 @@ function init(){
  * @memberof TimeManager
  * @param {number} frameTime specify the frameDuration if known [optional]
  */
-function setApplicationTimes(frameTime){
+function tick(frameTime){
 
     let newFrameUnixTime = utils.getUnixTimeInMilliseconds();
     if (frameTime)
@@ -57,6 +58,7 @@ function setApplicationTimes(frameTime){
     else
         frameDuration = newFrameUnixTime - frameUnixTime;
     
+
     // dont consider frame duration if app is not active
     frameDurationClone = appActive ? frameDuration : 0;
 
@@ -74,7 +76,6 @@ function setApplicationTimes(frameTime){
         videoDuration += utils.convertMillisecondsToSecondsFloat(frameDurationClone);
 
     }
-
 
 }
 
@@ -123,14 +124,13 @@ function setHeadsetState(newState){
 
 /**
  * Reset the timings, sets the frame time to unix time provided, reset others
- * @param {number} unixTime new unix time of the frame 
  */
-function reset(unixTime){
+function reset(){
 
-    frameUnixTime = unixTime;
-    frameDuration = 0;
+    frameUnixTime = utils.getUnixTimeInMilliseconds();
     timeSinceStart = 0;
     playTimeSinceStart = 0;
+    dataCollector.reset();
 
 }
 
@@ -260,13 +260,13 @@ function getVideoState(){
  */
 function getVideoDuration(){
 
-    return videoDuration;
+    return Math.round(videoDuration * 1000) / 1000;
 
 }
 
 export default {
     init,
-    setApplicationTimes,
+    tick,
     reset,
     setAppActive,
     setRemoveHeadsetPausesPlay,

@@ -67,7 +67,7 @@ function convertMillisecondsToSeconds(milliseconds){
  */
 function convertMillisecondsToSecondsFloat(milliseconds){
 
-    return milliseconds / 1000;
+    return Math.round(milliseconds) / 1000;
 
 }
 

@@ -41,10 +41,9 @@ class SceneSession{
      */
     addMedia(mediaId, name, type, url){
         
-        const timeSinceSceneBegin = timeManager.getPlayTimeSinceStart() -
-            this.sceneBeginTime;
+        const gameTime = timeManager.getPlayTimeSinceStart() - this.sceneBeginTime;
         this.currentMediaSession = new mediaSession(mediaId, name, type,
-            timeSinceSceneBegin, url);
+            utils.convertMillisecondsToSecondsFloat(gameTime), url);
         this.media.push(this.currentMediaSession);
 
     }
@@ -73,16 +72,15 @@ class SceneSession{
      * @param {string} eventName name of the event
      * @param {string} position 3D position associated with the event
      * @param {object} extra extra information and filter key-value pairs in the event
-     * @param {number} eventTime unix time in millisseconds when the event occurred
-     * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
      */
-    _registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart){
+    _registerEvent(eventName, position, extra){
 
+        const gameTime = timeManager.getPlayTimeSinceStart() - this.sceneBeginTime;
         this.events.eventName.push(eventName);
         this.events.position.push(position);
         this.events.extra.push(extra);
-        this.events.eventTime.push(eventTime);
-        this.events.gameTime.push(eventPlayTimeSinceStart - this.sceneBeginTime);
+        this.events.eventTime.push(timeManager.getFrameUnixTime());
+        this.events.gameTime.push(utils.convertMillisecondsToSecondsFloat(gameTime));
 
     }
 
@@ -91,20 +89,18 @@ class SceneSession{
      * @param {string} eventName name of the event
      * @param {string} position 3D position associated with the event
      * @param {object} extra extra information and filter key-value pairs in the event
-     * @param {number} eventTime unix time in millisseconds when the event occurred
-     * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
      */
-    registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart){
+    registerEvent(eventName, position, extra){
 
         if (this.currentMediaSession){
 
-            const gameTime = eventPlayTimeSinceStart - this.sceneBeginTime;
-            this.currentMediaSession.registerEvent(eventName, position, extra, gameTime, eventTime, eventPlayTimeSinceStart);
+            const gameTime = timeManager.getPlayTimeSinceStart() - this.sceneBeginTime;
+            this.currentMediaSession.registerEvent(eventName, position, extra,
+                utils.convertMillisecondsToSecondsFloat(gameTime));
 
         } else {
 
-            this._registerEvent(eventName, position, extra, eventTime,
-                eventPlayTimeSinceStart);
+            this._registerEvent(eventName, position, extra);
             
         }
 

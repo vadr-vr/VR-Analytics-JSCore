@@ -149,14 +149,27 @@ function tick(){
 
 }
 
+/**
+ * Reset the last fetch time of all the events, used when timeManager resets
+ * @memberof DataCollector
+ */
+function reset(){
+
+    for (let key in dataConfig){
+
+        dataConfig[key].lastFetchTime = 0;
+
+    }
+
+}
+
 // collects the events from the given array and adds to datamanager
 function _setEvents(eventsArray){
 
     for (let i = 0; i < eventsArray.length; i++){
 
         let event = eventsArray[i];
-        dataManager.registerEvent(event[0], event[1], event[2], 
-            timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
+        dataManager.registerEvent(event[0], event[1], event[2]);
 
     }
 
@@ -168,5 +181,6 @@ export default {
     setAngleCallback,
     callbacks,
     configureEventCollection,
-    tick
+    tick,
+    reset
 };

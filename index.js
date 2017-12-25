@@ -20,12 +20,13 @@ function initVadRAnalytics(){
 
     timeManager.init();
     dataManager.init();
+    deviceData.init();
 
 }
 
 function tick(time, timeDelta){
 
-    timeManager.setApplicationTimes(timeDelta);
+    timeManager.tick(timeDelta);
     dataCollector.tick();
 
 }
@@ -73,12 +74,7 @@ export default {
         addScene: dataManager.addScene,
         closeScene: dataManager.closeScene
     },
-    registerEvent: (eventName, position, extra) => {
-        
-        dataManager.registerEvent(eventName, position, extra,
-            timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
-
-    },
+    registerEvent: dataManager.registerEvent,
     playState: {
         appOutOfFocus: () => {timeManager.setAppActive(false);},
         appInFocus: () => {timeManager.setAppActive(true);},

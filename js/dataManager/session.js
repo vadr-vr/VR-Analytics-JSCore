@@ -105,10 +105,8 @@ class Session{
      * @param {string} eventName name of the event
      * @param {string} position 3D position associated with the event
      * @param {object} extra extra information and filter key-value pairs in the event
-     * @param {number} eventTime unix time in millisseconds when the event occurred
-     * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
      */
-    registerEvent(eventName, position, extra, eventTime, eventPlayTimeSinceStart){
+    registerEvent(eventName, position, extra){
 
         if (this.currentScene == null){
             
@@ -117,8 +115,7 @@ class Session{
 
         }
 
-        this.currentScene.registerEvent(eventName, position, extra, eventTime,
-            eventPlayTimeSinceStart);
+        this.currentScene.registerEvent(eventName, position, extra);
                 
     }
 

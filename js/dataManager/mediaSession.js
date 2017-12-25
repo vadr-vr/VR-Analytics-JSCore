@@ -52,20 +52,20 @@ class MediaSession{
      * @param {string} position 3D position associated with the event
      * @param {object} extra extra information and filter key-value pairs in the event
      * @param {number} gameTime time since start of scene when the event occurred
-     * @param {number} eventTime unix time in milliseconds when the event occurred
-     * @param {number} eventPlayTimeSinceStart time(milliseconds) since application start
      */
-    registerEvent(eventName, position, extra, gameTime, eventTime, 
-        eventPlayTimeSinceStart){
+    registerEvent(eventName, position, extra, gameTime){
 
         this.events.eventName.push(eventName);
         this.events.position.push(position);
         this.events.extra.push(extra);
         this.events.gameTime.push(gameTime);
-        this.events.eventTime.push(eventTime);
+        this.events.eventTime.push(timeManager.getFrameUnixTime());
 
         // calculate mediaDuration from eventPlayTimeSinceStart
-        this.events.mediaDuration.push(eventPlayTimeSinceStart - this.mediaBeginTime);
+        const mediaDuration = timeManager.getPlayTimeSinceStart() - 
+            this.mediaBeginTime;
+        this.events.mediaDuration.push(
+            utils.convertMillisecondsToSecondsFloat(mediaDuration));
 
         // fetch the video duration of the event
         if (this.type == 1){

@@ -149,6 +149,18 @@ function tick(){
 
 }
 
+// collects the events from the given array and adds to datamanager
+function _setEvents(eventsArray){
+
+    for (let i = 0; i < eventsArray.length; i++){
+
+        let event = eventsArray[i];
+        dataManager.registerEvent(event[0], event[1], event[2]);
+
+    }
+
+}
+
 /**
  * Reset the last fetch time of all the events, used when timeManager resets
  * @memberof DataCollector
@@ -163,13 +175,15 @@ function reset(){
 
 }
 
-// collects the events from the given array and adds to datamanager
-function _setEvents(eventsArray){
+function destroy(){
 
-    for (let i = 0; i < eventsArray.length; i++){
+    callbacks.positionCallback = null;
+    callbacks.gazeCallback = null;
+    callbacks.angleCallback = null;
 
-        let event = eventsArray[i];
-        dataManager.registerEvent(event[0], event[1], event[2]);
+    for (let key in dataConfig){
+
+        dataConfig[key].calculator.destroy();
 
     }
 
@@ -182,5 +196,6 @@ export default {
     callbacks,
     configureEventCollection,
     tick,
-    reset
+    reset,
+    destroy
 };

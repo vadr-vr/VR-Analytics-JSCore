@@ -41,6 +41,12 @@ function getEvents(){
 
     currentPosition = positionCallback();
 
+    if (!currentPosition){
+
+        return [];
+        
+    }
+
     const extra = {
         'ik': ['time'],
         'iv': [timeManager.getFrameDurationSeconds()],
@@ -68,10 +74,16 @@ function getCurrentPosition(){
 
 }
 
+function destroy(){
+
+    positionCallback = null;
+
+}
 
 export default {
     setPositionCallback,
     getCurrentPosition,
     getEvents,
-    getMediaEvents
+    getMediaEvents,
+    destroy
 };

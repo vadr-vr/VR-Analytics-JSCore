@@ -15,12 +15,6 @@ import orientationCollector from './orientationCollector';
 //     'Focus'
 //     Filter 'Object' - 'object name'
 
-// const eventsDict= [{
-//     'name': 'FPS',
-//     'status': true,
-//     'callback': null
-// }];
-
 let framesTillNow = 0;
 
 function _getEvents(duration){
@@ -62,8 +56,14 @@ function tick(){
 
 }
 
+function destroy(){
+
+}
+
+
 export default {
     getEvents,
     getMediaEvents,
-    tick
+    tick,
+    destroy
 };

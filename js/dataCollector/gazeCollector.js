@@ -42,6 +42,12 @@ function getEvents(){
 
     let gaze = gazeCallback();
 
+    if (!gaze){
+
+        return [];
+
+    }
+
     const extra = {
         'ik': ['time'],
         'iv': [timeManager.getFrameDurationSeconds()],
@@ -63,6 +69,12 @@ function getMediaEvents(){
 
     let angle = angleCallback();
 
+    if (!angle){
+
+        return [];
+        
+    }
+
     const extra = {
         'ik': ['time'],
         'iv': [timeManager.getFrameDurationSeconds()],
@@ -81,11 +93,17 @@ function getMediaEvents(){
 
 }
 
+function destroy(){
 
+    gazeCallback = null;
+    angleCallback = null;
+
+}
 
 export default {
     setGazeCallback,
     setAngleCallback,
     getEvents,
-    getMediaEvents
+    getMediaEvents,
+    destroy
 };

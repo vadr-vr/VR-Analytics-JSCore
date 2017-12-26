@@ -3,7 +3,9 @@ import logger from '../logger';
 import timeManager from '../timeManager';
 import applicationConfig from '../config';
 import userData from '../userData';
+import deviceData from '../deviceData';
 import sceneSession from './sceneSession';
+
 /**
  * Stores events for a single session
  * @param {object} extras dictionary containing extra information about the session 
@@ -11,10 +13,18 @@ import sceneSession from './sceneSession';
  */
 class Session{
     
-    constructor(extra){
+    constructor(sessionToken, startTime, extra){
 
-        this.token = utils.getToken();
-        this.time = timeManager.getFrameUnixTime();
+        if (sessionToken)
+            this.token = sessionToken;
+        else
+            this.token = utils.getToken();
+
+        if (startTime)
+            this.time = startTime;
+        else
+            this.time = timeManager.getFrameUnixTime();
+
         this.extra = utils.deepClone(extra);
 
         this.scenes = [];
@@ -25,9 +35,30 @@ class Session{
     /**
      * Set or overwrite any extra key value pair
      * @param {string} key
-     * @param {string} value
+     * @param {string, number} value
      */
     setExtra(key, value){
+
+        if (key.length > 50){
+
+            logger.error('Max length of session extra info key is 50 chars. Aborting.');
+            return;
+
+        }
+
+        if (typeof(value) == 'string' && value.length > 100){
+
+            logger.error('Max length of session extra info val is 100 chars. Aborting.');
+            return;
+            
+        }
+
+        if (typeof(value) != 'string' && typeof(value) != 'number'){
+
+            logger.error('Session extra info val should be string or number. Aborting');
+            return;
+
+        }
 
         this.extra[key] = value;
 
@@ -120,6 +151,26 @@ class Session{
     }
 
     /**
+     * Returns the session token of the current session
+     * @returns {string} sessionToken
+     */
+    getSessionToken(){
+
+        return this.token;
+
+    }
+
+    /**
+     * Returns the unix time of session start
+     * @returns {number} session start unixTime
+     */
+    getSessionUnixTime(){
+
+        return this.time;
+
+    }
+
+    /**
      * Get dictionary corresponding to session
      * @returns {object} dictionary form of session
      */
@@ -131,6 +182,14 @@ class Session{
             'extra': this.extra,
             'scenes': []
         };
+
+        const browserInfo = deviceData.getBrowserInfo();
+
+        for (let key in browserInfo){
+
+            sessionDicitonary['extra'][key] = browserInfo[key];
+
+        }
 
         if (applicationConfig.getTestMode())
             sessionDicitonary['test'] = 'true';
@@ -156,11 +215,7 @@ class Session{
      */
     getDuplicate(){
         
-        const newSession = new Session(this.extra);
-
-        // assign params not passed to constructor
-        newSession.token = this.token;
-        newSession.time = this.time;
+        const newSession = new Session(this.token, this.time, this.extra);
 
         if (this.currentScene){
 

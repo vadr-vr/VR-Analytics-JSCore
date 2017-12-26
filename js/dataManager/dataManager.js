@@ -1,4 +1,5 @@
 import logger from '../logger';
+import constants from '../constants';
 import utils from '../utils';
 import session from './session';
 import config from '../config';
@@ -32,6 +33,17 @@ function init(){
 
 }
 
+/**
+ * Add extra information to the session
+ * @memberof DataManager
+ * @param {string} infoKey key which identifies the information, max 50 characters
+ * @param {string, number} infoValue should be float or string with max 100 characters
+ */
+function addSessionExtra(infoKey, infoValue){
+
+    currentSession.setExtra(infoKey, infoValue);
+
+}
 // Functions related to creating and deleting scene sessions and media sessions
 /**
  * create scene session
@@ -207,22 +219,62 @@ function _createSession(){
     // can also check if any ealier session can be used
     if (!currentSession){
         
-        currentSession = new session({});
+        const currentSessionCookie = utils.getCookie(constants.sessionCookieName);
+
+        if (currentSessionCookie){
+
+            const currentSessionSplit = currentSessionCookie.split('__');
+            currentSession = new session(currentSessionSplit[0], 
+                parseInt(currentSessionSplit[1]), {});
+            
+            logger.debug('Found existing session', currentSessionSplit[0], 
+                currentSessionSplit[1]);
+
+        } else{
+
+            currentSession = new session(null, null, {});
+            _setSessionCookie();
+
+            logger.debug('Creating new session', currentSession.getSessionToken(), 
+                currentSession.getSessionUnixTime());
+
+        }
+
         lastRequestTime = utils.getUnixTimeInSeconds();
         
     }
 
     // checks if time since last request has exceeded the maximum request time
-    timeSinceRequestChecker = setInterval(
-        () => {
-            const currentTime = utils.getUnixTimeInSeconds();
-            if (currentTime - lastRequestTime > config.getDataPostTimeInterval()){
+    if (!timeSinceRequestChecker){
 
-                _createDataRequest();
+        timeSinceRequestChecker = setInterval(
+            () => {
+                const currentTime = utils.getUnixTimeInSeconds();
+                if (currentTime - lastRequestTime > config.getDataPostTimeInterval()){
+    
+                    _createDataRequest();
+    
+                }
+            }, 
+            1000);
 
-            }
-        }, 
-        1000);
+    }
+
+}
+
+function _setSessionCookie(){
+
+    const currentDate = new Date();
+    const laterDate = new Date();
+    laterDate.setMinutes(currentDate.getMinutes() + 
+        constants.sessionCookieValidForMinutes);
+    
+    const cookieValueString = currentSession.getSessionToken() + '__' + 
+        currentSession.getSessionUnixTime().toString();
+
+    utils.setCookie(constants.sessionCookieName, cookieValueString, laterDate);
+
+    logger.debug('Setting session cookie', cookieValueString);
 
 }
 
@@ -233,12 +285,13 @@ function _createSession(){
  */
 function _createDataRequest(){
 
-    logger.info('creating data request');
+    logger.info('Creating data request');
     const currentSessionData = currentSession.getDictionary();
     serverRequestManager.addDataRequest(currentSessionData);
     
     currentSession = currentSession.getDuplicate();
     lastRequestTime = utils.getUnixTimeInSeconds();
+    _setSessionCookie();
 
 }
 
@@ -261,10 +314,14 @@ function _checkDataPairs(){
 
 export default {
     init,
-    registerEvent,
     destroy,
+
+    addSessionExtra,
+    registerEvent,
+    
     addScene, 
     closeScene,
+    
     media: {
         addMedia: addMedia, 
         closeMedia: closeMedia,

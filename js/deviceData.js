@@ -11,12 +11,13 @@ import utils from './utils';
 const deviceInfo = {
     'deviceId': null,
 };
+let browserInfo = {};
 
 const userAgent = navigator.userAgent;
 const language = navigator.language;
 const deviceDetails = parser(userAgent);
 
-deviceInfo['userAgent'] = userAgent;
+browserInfo['userAgent'] = userAgent;
 
 if (language)
     deviceInfo['language'] = language;
@@ -33,15 +34,11 @@ if (deviceDetails.os){
 
 if (deviceDetails.browser){
 
-    const browserInfo = {};
-
     if (deviceDetails.browser.name)
-        browserInfo['name'] = deviceDetails.browser.name;
+        browserInfo['browserName'] = deviceDetails.browser.name;
 
     if (deviceDetails.browser.version)
-        browserInfo['version'] = deviceDetails.browser.version;
-
-    deviceInfo['browser'] = browserInfo;
+        browserInfo['browserVersion'] = deviceDetails.browser.version;
 
 }
 
@@ -67,41 +64,8 @@ function _getSetDeviceIdentifier(){
 function _getVadrDeviceFromCookie(){
 
     const deviceCookieName = constants.deviceCookieName;
-    const allCookies = document.cookie;
 
-    if (allCookies.indexOf(deviceCookieName) == -1)
-        return null;
-    
-    const cookieList = allCookies.split(';');
-
-    for (let i = 0; i < cookieList.length; i++){
-
-        const cookieString = cookieList[i].replace(/\s/g, '');
-
-        if (cookieString.startsWith(deviceCookieName)){
-
-            let separatorIndex= cookieString.indexOf('=');
-
-            if (separatorIndex > 0){
-
-                const deviceId = cookieString.substring(separatorIndex + 1);
-                
-                if (deviceId)
-                    return deviceId;
-                else 
-                    return null;
-
-            } else {
-
-                return null;
-
-            }
-
-        }
-
-    }
-
-    return null;
+    return utils.getCookie(deviceCookieName);
 
 }
 
@@ -117,10 +81,8 @@ function _setVadrDeviceCookie(){
     laterDate.setFullYear(currentDate.getFullYear() + cookieValidFor);
 
     const deviceId = utils.getToken();
-    const cookieString = deviceCookieName + '=' + deviceId + ';' + 'expires=' + 
-        laterDate.toUTCString();
 
-    document.cookie = cookieString;
+    utils.setCookie(deviceCookieName, deviceId, laterDate);
     
     return deviceId;
 
@@ -133,6 +95,7 @@ function _setVadrDeviceCookie(){
 function init(){
 
     logger.debug('Device info is', deviceInfo);
+    logger.debug('Browser info is', browserInfo);
     
 }
 
@@ -158,10 +121,21 @@ function getDeviceInformation(){
 
 }
 
+/**
+ * Returns the broser details like name, version and user agent
+ * @returns {object} broserInformation
+ */
+function getBrowserInfo(){
+
+    return utils.deepClone(browserInfo);
+
+}
+
 export default {
     init,
     getDeviceId,
-    getDeviceInformation
+    getDeviceInformation,
+    getBrowserInfo
 };
 
 /*

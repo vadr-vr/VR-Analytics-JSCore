@@ -52,6 +52,7 @@ export default {
         setUserId: userId => {user.setUserId(userId, true);},
         setInfo: user.setExtraInfo
     },
+    setSessionInfo: dataManager.addSessionExtra,
     setDataConfig: {
         orientation: (status, timePeriod) => {
             dataCollector.configureEventCollection('Orientation', status, timePeriod);
@@ -74,7 +75,41 @@ export default {
         addScene: dataManager.addScene,
         closeScene: dataManager.closeScene
     },
-    registerEvent: dataManager.registerEvent,
+    registerEvent: (eventName, position, extra) => {
+        
+        const extraInfo = {
+            'ik': [],
+            'iv': [],
+            'fk': [],
+            'fv': []
+        };
+
+        for (let key in extra){
+
+            const keyValue = extra[key];
+
+            if (typeof(keyValue) == 'string'){
+
+                extraInfo['fk'].push(key);
+                extraInfo['fv'].push(keyValue);
+
+            } else if(typeof(keyValue) == 'number') {
+
+                extraInfo['ik'].push(key);
+                extraInfo['iv'].push(keyValue);
+
+            } else{
+
+                logger.error('Extra information value type not recognized. Aborting.');
+                return;
+
+            }
+
+        }
+
+        dataManager.registerEvent(eventName, position, extraInfo);
+
+    },
     playState: {
         appOutOfFocus: () => {timeManager.setAppActive(false);},
         appInFocus: () => {timeManager.setAppActive(true);},

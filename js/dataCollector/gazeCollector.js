@@ -49,7 +49,7 @@ function getEvents(){
     }
 
     const extra = {
-        'ik': ['time'],
+        'ik': ['Time'],
         'iv': [timeManager.getFrameDurationSeconds()],
         'fk': [],
         'fv': []
@@ -76,7 +76,7 @@ function getMediaEvents(){
     }
 
     const extra = {
-        'ik': ['time'],
+        'ik': ['Time'],
         'iv': [timeManager.getFrameDurationSeconds()],
         'fk': [],
         'fv': []

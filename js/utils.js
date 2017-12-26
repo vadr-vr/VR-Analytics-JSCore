@@ -79,6 +79,9 @@ function convertMillisecondsToSecondsFloat(milliseconds){
  */
 function deepClone(inputDict){
 
+    if (!inputDict)
+        return null;
+
     const clonedDict = {};
 
     for (let key in inputDict){
@@ -100,11 +103,70 @@ function deepClone(inputDict){
 
 }
 
+/**
+ * Sets the cookie with the given name, value and validity
+ * @param {string} cookieName name of the cookie
+ * @param {string} value value of the cookie
+ * @param {Date} validity valid till date object
+ */
+function setCookie(cookieName, value, validity){
+
+    const cookieString = cookieName + '=' + value + ';' + 'expires=' + 
+        validity.toUTCString();
+
+    document.cookie = cookieString;
+
+
+}
+
+function getCookie(cookieName){
+
+    const allCookies = document.cookie;
+
+    if (allCookies.indexOf(cookieName) == -1)
+        return null;
+    
+    const cookieList = allCookies.split(';');
+
+    for (let i = 0; i < cookieList.length; i++){
+
+        const cookieString = cookieList[i].replace(/\s/g, '');
+
+        if (cookieString.startsWith(cookieName)){
+
+            let separatorIndex= cookieString.indexOf('=');
+
+            if (separatorIndex > 0){
+
+                const cookieValue = cookieString.substring(separatorIndex + 1);
+                
+                if (cookieValue)
+                    return cookieValue;
+                else 
+                    return null;
+
+            } else {
+
+                return null;
+
+            }
+
+        }
+
+    }
+
+    return null;
+
+}
+
 export default {
     getToken,
     getUnixTimeInSeconds,
     getUnixTimeInMilliseconds,
     convertMillisecondsToSeconds,
     convertMillisecondsToSecondsFloat,
-    deepClone
+    deepClone,
+
+    setCookie,
+    getCookie
 };

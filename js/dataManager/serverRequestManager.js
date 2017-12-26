@@ -1,10 +1,8 @@
 import superagent from 'superagent/superagent';
-// import pouchDb from 'pouchdb-browser';
 import logger from '../logger';
 import config from '../config';
 import constants from '../constants';
 import device from '../deviceData';
-
 
 /**
  * @module ServerRequestManager
@@ -12,11 +10,11 @@ import device from '../deviceData';
  * And retreving them to make post calls to server
  */
 
-// const vadrDb = new pouchDb('vadrAnalyticsDb');
-window.requestArray = [];
-const dataRequests = [];
+let dataRequests = null;
 let requestingPost = false;
 let failedRequestTimeout = null;
+
+_getLocalStorage();
 
 /**
  * Adds request to send data in list of requests
@@ -28,14 +26,36 @@ function addDataRequest(requestDict){
     logger.info('Adding request to server');
 
     const dataRequest = _getServerRequest(requestDict);
-    logger.debug('Request data', dataRequest);
-    window.requestArray.push(dataRequest);
+
     _addRequestToDb(dataRequest).then(() => {
 
-        if (!requestingPost)
+        if (!requestingPost){
+
             _makeRequestToServer();
 
+        }
+
     });
+
+}
+
+function _getLocalStorage(){
+
+    const existingData = localStorage.getItem(constants.localStorageKeyName);
+    if (existingData)
+        dataRequests = JSON.parse(existingData);
+    else
+        dataRequests = {
+            'list': []
+        };
+
+    logger.debug('These many existing requests found', dataRequests['list'].length);
+
+}
+
+function _syncToLocalStorage(){
+
+    localStorage.setItem(constants.localStorageKeyName, JSON.stringify(dataRequests));
 
 }
 
@@ -66,9 +86,10 @@ function _getServerRequest(sessionRequest){
 
 function _addRequestToDb(dataRequest){
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
-        dataRequests.push(dataRequest);
+        dataRequests['list'].push(dataRequest);
+        _syncToLocalStorage();
         resolve();
         // reject("failure reason"); // rejected
 
@@ -80,9 +101,11 @@ function _getRequestFromDb(){
 
     return new Promise((resolve, reject) => {
 
-        if (dataRequests.length >= 1){
+        if (dataRequests['list'].length >= 1){
 
-            const lruData = dataRequests.shift();
+            const lruData = dataRequests['list'].shift();
+
+            _syncToLocalStorage();
             resolve(lruData);
 
         } else{
@@ -97,39 +120,58 @@ function _getRequestFromDb(){
 
 function _makeRequestToServer(){
 
+
     requestingPost = true;
     _getRequestFromDb().then((request_data) => {
 
-        console.log('making request to server', request_data);
+        logger.debug('making request to server');
 
         superagent.post(constants.requestUrl)
+            // .set('Content-Type', 'application/json')
+            // .responseType('application/json')
             .send(request_data)
-            .then((hello) => {
+            .then(() => {
 
-                console.log('server said ', hello);
                 _makeRequestToServer();
 
             })
-            .catch(function(error){
+            .catch((error) => {
                 
-                console.log('server error ', error);
-                requestingPost = false;
-                _addRequestToDb(request_data).then(() => {
+                logger.debug('Error while uploading data.');
 
-                    failedRequestTimeout = setTimeout(() => {
+                if (error && error.response && error.response.body && 
+                    error.response.body['delete']){
+
+                    _makeRequestToServer();
+
+                } else {
+
+                    requestingPost = false;
+                    _addRequestToDb(request_data).then(() => {
     
-                        if (!requestingPost){
-    
-                            _makeRequestToServer();
-    
+                        if (failedRequestTimeout){
+
+                            clearTimeout(failedRequestTimeout);
+
                         }
-                    
-                    }, 10000);
 
-                });
+                        failedRequestTimeout = setTimeout(() => {
+        
+                            if (!requestingPost){
+        
+                                _makeRequestToServer();
+        
+                            }
+    
+                            failedRequestTimeout = null;
+                        
+                        }, 10000);
+    
+                    });
+
+                }
 
             });
-        _makeRequestToServer();
 
     }).catch(() => {
 

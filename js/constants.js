@@ -8,8 +8,7 @@ const cookieValidForYears = 3;
 const sessionCookieName = '_vadrAnalyticsSessionId';
 const sessionCookieValidForMinutes = 30;
 const localStorageKeyName = '_vadrDataStorage';
-// const requestUrl = 'http://dev.vadr.io/analytics/api/v1.1/register/data/';
-const requestUrl = 'http://vadr.com:8000/analytics/api/v1.1/register/data/';
+const requestUrl = 'https://vadr.io/analytics/api/v1.1/register/data/';
 
 /**
  * Get the device cookie name

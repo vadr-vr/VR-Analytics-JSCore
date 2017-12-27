@@ -1,8 +1,7 @@
-# VadR Netowork core SDK for VR Analytics
+# VadR Network JS core for VR Analytics SDK
 
 ## Description
-This SDK provides the core functionality for vadr analytics, and is supposed to be used along with VadRs platform 
-specific SDKs for AFrame and ReactVR.  
+This package provides the core functionality for vadr analytics, and is supposed to be used along with VadRs JS platform specific SDKs for AFrame and ReactVR.  
 
 To start using VadrAnalytics, please visit <http://www.vadr.io>.
 

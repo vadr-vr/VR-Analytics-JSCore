@@ -105,6 +105,7 @@ function deepClone(inputDict){
 
 /**
  * Sets the cookie with the given name, value and validity
+ * @memberof Utils
  * @param {string} cookieName name of the cookie
  * @param {string} value value of the cookie
  * @param {Date} validity valid till date object

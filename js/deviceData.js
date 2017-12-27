@@ -123,6 +123,7 @@ function getDeviceInformation(){
 
 /**
  * Returns the broser details like name, version and user agent
+ * @memberof DeviceData
  * @returns {object} broserInformation
  */
 function getBrowserInfo(){

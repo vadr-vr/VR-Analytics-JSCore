@@ -1,7 +1,7 @@
 import timeManager from '../timeManager';
 /**
  * @module OrientationCollector
- * @description Calculates the position and other eevnts associated with position data
+ * @description Calculates the position and other events associated with position data
  */
 
 //TODO
@@ -21,6 +21,7 @@ let currentPosition = null;
 /**
  * Sets the position callback
  * @memberof OrientationCollector
+ * @param {function} newPositionCallback new callback to be used to fetch position
  */
 function setPositionCallback(newPositionCallback){
 
@@ -31,7 +32,7 @@ function setPositionCallback(newPositionCallback){
 /**
  * returns array of all the position related events with extra info and filters
  * @memberof OrientationCollector
- * @returns event with with extra key info dict
+ * @returns {array} event deatails in format [name, position, extraInfo]
  */
 function getEvents(){
 
@@ -65,8 +66,9 @@ function getMediaEvents(){
 }
 
 /**
- * @memberof OrientationCollector
  * Fetch the position calculated in current frame. 
+ * @memberof OrientationCollector
+ * @returns {string} currentPosition
  */
 function getCurrentPosition(){
 

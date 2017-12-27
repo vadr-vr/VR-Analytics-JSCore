@@ -124,6 +124,7 @@ function setHeadsetState(newState){
 
 /**
  * Reset the timings, sets the frame time to unix time provided, reset others
+ * @memberof TimeManager
  */
 function reset(){
 

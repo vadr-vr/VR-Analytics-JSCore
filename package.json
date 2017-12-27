@@ -1,7 +1,7 @@
 {
   "name": "vadr-js-core",
   "version": "1.0.0",
-  "description": "This package is used by VadRs platform sprecific packages to provide VR analytics",
+  "description": "It is used by VadRs platform specific packages to provide VR analytics",
   "main": "index.js",
   "scripts": {
     "test": "mocha --require babel-core/register"
@@ -14,7 +14,6 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/abhishekbansal1993/vadrjscore#readme",
   "dependencies": {
-    "pouchdb-browser": "^6.4.1",
     "superagent": "^3.8.2",
     "ua-parser-js": "^0.7.17",
     "uuid-js": "^0.7.5"

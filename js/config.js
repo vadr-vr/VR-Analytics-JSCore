@@ -33,8 +33,8 @@ function setApplication(appId, token, version){
 }
 
 /**
- * @memberof ApplicationConfig
  * Returns the application config set by user
+ * @memberof ApplicationConfig
  * @returns {object} cloned version of application config dict
  */
 function getApplicationConfig(){
@@ -47,8 +47,8 @@ function getApplicationConfig(){
 }
 
 /**
- * @memberof ApplicationConfig
  * Sets the SDK type used by the application. Set by the platform implementation
+ * @memberof ApplicationConfig
  * @param {string} sdk sdk type
  */
 function setSdkType(sdk){
@@ -59,6 +59,8 @@ function setSdkType(sdk){
 
 /**
  * Returns the platform SDK is used for
+ * @memberof ApplicationConfig
+ * @returns {string} sdkType
  */
 function getSdkType(){
 

@@ -1,7 +1,7 @@
 {
-  "name": "vadr-js-core",
+  "name": "vadr-core-vr",
   "version": "1.0.0",
-  "description": "It is used by VadRs platform specific packages to provide VR analytics",
+  "description": "Used by VadR Networks platform specific packages to provide VR analytics",
   "main": "index.js",
   "scripts": {
     "test": "mocha --require babel-core/register"
@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/abhishekbansal1993/vadrjscore.git"
   },
-  "author": "VadR <contactus@vadr.io> (https://www.vadr.io)",
-  "license": "ISC",
+  "author": "VadR Network Inc.",
+  "license": "MIT",
   "homepage": "https://bitbucket.org/abhishekbansal1993/vadrjscore#readme",
   "dependencies": {
     "superagent": "^3.8.2",

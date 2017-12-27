@@ -8,11 +8,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/abhishekbansal1993/vadrjscore.git"
+    "url": "https://github.com/vadr-vr/VR-Analytics-JSCore.git"
   },
   "author": "VadR Network Inc.",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/abhishekbansal1993/vadrjscore#readme",
+  "homepage": "https://vadr.io",
   "dependencies": {
     "superagent": "^3.8.2",
     "ua-parser-js": "^0.7.17",

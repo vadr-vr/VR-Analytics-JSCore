@@ -77,6 +77,14 @@ export default {
     },
     registerEvent: (eventName, position, extra) => {
         
+        if (position.length != 3 || isNaN(position[0]) || isNaN(position[1]) || 
+            isNaN(position[2])){
+            
+            logger.error('Position needs to be array of number of length 3. Aborting');
+            return;
+
+        }
+        
         const extraInfo = {
             'ik': [],
             'iv': [],
@@ -107,7 +115,10 @@ export default {
 
         }
 
-        dataManager.registerEvent(eventName, position, extraInfo);
+        const positionString = position[0].toFixed(4) + ',' + position[1].toFixed(4) +
+            ',' + position[2].toFixed(4);
+
+        dataManager.registerEvent(eventName, positionString, extraInfo);
 
     },
     playState: {

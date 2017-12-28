@@ -78,9 +78,25 @@ function closeScene(){
  */
 function addMedia(mediaId, name, type, url){
     
+    // close any previous media
+    if (mediaPlaying)
+        closeMedia();
+        
     mediaPlaying = true;
-    timeManager.playVideo();
-    currentSession.addMedia(mediaId, name, type, url);
+    let typeInteger = 1;
+
+    if (type == 'Video'){
+
+        timeManager.playVideo();
+        typeInteger = 1;
+    
+    } else {
+
+        typeInteger = 2;
+    
+    }
+
+    currentSession.addMedia(mediaId, name, typeInteger, url);
 
 }
 

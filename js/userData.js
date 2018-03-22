@@ -57,9 +57,19 @@ function setGender(gender){
 
 }
 
-function setUserAge(age){
+function setAge(age){
 
     setExtraInfo('age', age);
+
+}
+
+/**
+ * sets the users interests
+ * @param {string} interests comma separating string of user interests
+ */
+function setInterests(interests){
+
+    setExtraInfo('interests', interests);
 
 }
 
@@ -95,7 +105,8 @@ function getUserDictionary(){
 export default {
     setUserId,
     setExtraInfo,
-    setUserAge,
+    setAge,
     setGender,
+    setInterests,
     getUserDictionary
 };

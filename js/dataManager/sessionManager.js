@@ -42,6 +42,13 @@ function createSession(){
                 currentSession.getSessionUnixTime());
 
         }
+
+        // associate session referrer with the session
+        if (sessionReferrer){
+
+            currentSession.setExtra('referrer', sessionReferrer);
+            
+        }
         
     }
 

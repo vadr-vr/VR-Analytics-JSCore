@@ -54,8 +54,9 @@ export default {
     enums,
     user: {
         setUserId: userId => {user.setUserId(userId, true);},
-        setUserAge: user.setUserAge,
+        setUserAge: user.setAge,
         setUserGender: user.setGender,
+        setUserInterests: user.setInterests,
         setInfo: user.setExtraInfo
     },
     setSessionInfo: dataManager.addSessionExtra,

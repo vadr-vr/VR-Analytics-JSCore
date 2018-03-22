@@ -1,4 +1,6 @@
 import deviceData from './deviceData';
+import enums from './enums';
+
 /**
  * @module User
  * @description Stores the user information such as user id and other details such as 
@@ -37,6 +39,30 @@ function setExtraInfo(infoKey, infoValue){
 
 }
 
+function setGender(gender){
+
+    let genderValue = enums.gender.unknown;
+
+    for (let key in enums.gender){
+
+        if (enums.gender[key] == gender){
+
+            genderValue = gender;
+
+        }
+
+    }
+
+    setExtraInfo('gender', genderValue);
+
+}
+
+function setUserAge(age){
+
+    setExtraInfo('age', age);
+
+}
+
 /**
  * Used to get all the user details in a dictionary format
  * @memberof User
@@ -69,5 +95,7 @@ function getUserDictionary(){
 export default {
     setUserId,
     setExtraInfo,
+    setUserAge,
+    setGender,
     getUserDictionary
 };

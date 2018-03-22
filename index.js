@@ -6,6 +6,7 @@ import deviceData from './js/deviceData';
 import dataManager from './js/dataManager/dataManager';
 import dataCollector from './js/dataCollector/dataCollector';
 import constants from './js/constants';
+import enums from './js/enums';
 
 /**
  * @module VadrJSCore
@@ -50,10 +51,11 @@ export default {
         setDefaultData: dataCollector.configureEventCollection,
         setRequestUrl: constants.setRequestUrl
     },
+    enums,
     user: {
         setUserId: userId => {user.setUserId(userId, true);},
-        // age
-        // gender
+        setUserAge: user.setUserAge,
+        setUserGender: user.setGender,
         setInfo: user.setExtraInfo
     },
     setSessionInfo: dataManager.addSessionExtra,

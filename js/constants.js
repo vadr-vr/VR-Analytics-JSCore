@@ -21,7 +21,7 @@ const getRequestUrl = () => {
 
     return requestUrl;
 
-}
+};
 /**
  * Get the device cookie name
  * @memberof Constants

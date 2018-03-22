@@ -1,4 +1,5 @@
 import uuid from 'uuid-js';
+import config from './config';
 /**
  * @module Utils
  * @description Contains utility functions
@@ -103,16 +104,33 @@ function deepClone(inputDict){
 
 }
 
+function _getAppPrefix(){
+
+    const appConfig = config.getApplicationConfig();
+    if (appConfig){
+
+        return '__app_' + appConfig.appId + '__version_' + appConfig.version;
+
+    }else{
+
+        return '';
+
+    }
+
+}
+
 /**
- * Sets the cookie with the given name, value and validity
+ * Sets the cookie with the given name, value and validity. Appends appId and version information 
+ * in the cookie name automatically
  * @memberof Utils
  * @param {string} cookieName name of the cookie
  * @param {string} value value of the cookie
  * @param {Date} validity valid till date object
  */
-function setCookie(cookieName, value, validity){
+function setCookie(cookieName, value, validity, useAppPrefix = true){
 
-    const cookieString = cookieName + '=' + value + ';' + 'expires=' + 
+    const appPrefix = useAppPrefix ? _getAppPrefix() : '';
+    const cookieString = appPrefix + cookieName + '=' + value + ';' + 'expires=' + 
         validity.toUTCString();
 
     document.cookie = cookieString;
@@ -120,7 +138,14 @@ function setCookie(cookieName, value, validity){
 
 }
 
-function getCookie(cookieName){
+function getCookie(cookieName, useAppPrefix = true){
+
+    // append app id and version information to cookie name
+    if (useAppPrefix){
+
+        cookieName = _getAppPrefix() + cookieName;
+
+    }
 
     const allCookies = document.cookie;
 
@@ -160,6 +185,21 @@ function getCookie(cookieName){
 
 }
 
+// get normalized data point duration
+function getDataPointDuration(duration){
+
+    if (duration > 1000){
+
+        return 1;
+
+    }else{
+
+        return duration / 1000;
+
+    }
+    
+}
+
 export default {
     getToken,
     getUnixTimeInSeconds,
@@ -169,5 +209,7 @@ export default {
     deepClone,
 
     setCookie,
-    getCookie
+    getCookie,
+
+    getDataPointDuration
 };

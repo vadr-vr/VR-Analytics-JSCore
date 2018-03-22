@@ -41,6 +41,7 @@ function addDataRequest(requestDict){
 
 function _getLocalStorage(){
 
+    // handles data for applications in a domain, irrespective of id
     const existingData = localStorage.getItem(constants.localStorageKeyName);
     if (existingData)
         dataRequests = JSON.parse(existingData);
@@ -126,7 +127,7 @@ function _makeRequestToServer(){
 
         logger.debug('making request to server');
 
-        superagent.post(constants.requestUrl)
+        superagent.post(constants.getRequestUrl())
             // .set('Content-Type', 'application/json')
             // .responseType('application/json')
             .send(request_data)

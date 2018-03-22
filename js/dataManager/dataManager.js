@@ -1,7 +1,6 @@
 import logger from '../logger';
-import constants from '../constants';
 import utils from '../utils';
-import session from './session';
+import sessionManager from './sessionManager';
 import config from '../config';
 import timeManager from '../timeManager';
 import dataCollector from '../dataCollector/dataCollector';
@@ -29,7 +28,24 @@ let timeSinceRequestChecker = null;
  */
 function init(){
 
-    _createSession();
+    currentSession = sessionManager.createSession();
+    lastRequestTime = utils.getUnixTimeInSeconds();
+
+    // checks if time since last request has exceeded the maximum request time
+    if (!timeSinceRequestChecker){
+
+        timeSinceRequestChecker = setInterval(
+            () => {
+                const currentTime = utils.getUnixTimeInSeconds();
+                if (currentTime - lastRequestTime > config.getDataPostTimeInterval()){
+    
+                    _createDataRequest();
+    
+                }
+            }, 
+            1000);
+
+    }
 
 }
 
@@ -226,75 +242,6 @@ function destroy(){
 // list all the private functions
 
 /**
- * Manages creation of current session.
- * @memberof DataManager
- * @private
- */
-function _createSession(){
-
-    // can also check if any ealier session can be used
-    if (!currentSession){
-        
-        const currentSessionCookie = utils.getCookie(constants.sessionCookieName);
-
-        if (currentSessionCookie){
-
-            const currentSessionSplit = currentSessionCookie.split('__');
-            currentSession = new session(currentSessionSplit[0], 
-                parseInt(currentSessionSplit[1]), {});
-            
-            logger.debug('Found existing session', currentSessionSplit[0], 
-                currentSessionSplit[1]);
-
-        } else{
-
-            currentSession = new session(null, null, {});
-            _setSessionCookie();
-
-            logger.debug('Creating new session', currentSession.getSessionToken(), 
-                currentSession.getSessionUnixTime());
-
-        }
-
-        lastRequestTime = utils.getUnixTimeInSeconds();
-        
-    }
-
-    // checks if time since last request has exceeded the maximum request time
-    if (!timeSinceRequestChecker){
-
-        timeSinceRequestChecker = setInterval(
-            () => {
-                const currentTime = utils.getUnixTimeInSeconds();
-                if (currentTime - lastRequestTime > config.getDataPostTimeInterval()){
-    
-                    _createDataRequest();
-    
-                }
-            }, 
-            1000);
-
-    }
-
-}
-
-function _setSessionCookie(){
-
-    const currentDate = new Date();
-    const laterDate = new Date();
-    laterDate.setMinutes(currentDate.getMinutes() + 
-        constants.sessionCookieValidForMinutes);
-    
-    const cookieValueString = currentSession.getSessionToken() + '__' + 
-        currentSession.getSessionUnixTime().toString();
-
-    utils.setCookie(constants.sessionCookieName, cookieValueString, laterDate);
-
-    logger.debug('Setting session cookie', cookieValueString);
-
-}
-
-/**
  * Pushes the stored data till now to request manager, clears the session data
  * @memberof DataManager
  * @private
@@ -307,7 +254,7 @@ function _createDataRequest(){
     
     currentSession = currentSession.getDuplicate();
     lastRequestTime = utils.getUnixTimeInSeconds();
-    _setSessionCookie();
+    sessionManager.setSessionCookie();
 
 }
 

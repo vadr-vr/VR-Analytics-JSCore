@@ -5,6 +5,7 @@ import user from './js/userData';
 import deviceData from './js/deviceData';
 import dataManager from './js/dataManager/dataManager';
 import dataCollector from './js/dataCollector/dataCollector';
+import constants from './js/constants';
 
 /**
  * @module VadrJSCore
@@ -46,10 +47,13 @@ export default {
         setApplication: config.setApplication,
         setSdk: config.setSdkType,
         setTestMode: config.setTestMode,
-        setDefaultData: dataCollector.configureEventCollection
+        setDefaultData: dataCollector.configureEventCollection,
+        setRequestUrl: constants.setRequestUrl
     },
     user: {
         setUserId: userId => {user.setUserId(userId, true);},
+        // age
+        // gender
         setInfo: user.setExtraInfo
     },
     setSessionInfo: dataManager.addSessionExtra,

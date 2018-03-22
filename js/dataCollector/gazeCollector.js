@@ -1,4 +1,5 @@
 import timeManager from '../timeManager';
+import utils from '../utils';
 /**
  * @module GazeCollector
  * @description Calculates the position and other eevnts associated with position data
@@ -32,7 +33,7 @@ function setAngleCallback(newAngleCallback){
  * @memberof GazeCollector
  * @returns event with with extra key info dict
  */
-function getEvents(){
+function getEvents(duration){
 
     if (gazeCallback == null){
 
@@ -50,7 +51,7 @@ function getEvents(){
 
     const extra = {
         'ik': ['Time'],
-        'iv': [timeManager.getFrameDurationSeconds()],
+        'iv': [utils.getDataPointDuration(duration)],
         'fk': [],
         'fv': []
     };
@@ -59,7 +60,7 @@ function getEvents(){
 
 }
 
-function getMediaEvents(){
+function getMediaEvents(duration){
 
     if (angleCallback == null){
         
@@ -77,7 +78,7 @@ function getMediaEvents(){
 
     const extra = {
         'ik': ['Time'],
-        'iv': [timeManager.getFrameDurationSeconds()],
+        'iv': [utils.getDataPointDuration(duration)],
         'fk': [],
         'fv': []
     };

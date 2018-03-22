@@ -65,7 +65,7 @@ function _getVadrDeviceFromCookie(){
 
     const deviceCookieName = constants.deviceCookieName;
 
-    return utils.getCookie(deviceCookieName);
+    return utils.getCookie(deviceCookieName, false);
 
 }
 
@@ -82,7 +82,7 @@ function _setVadrDeviceCookie(){
 
     const deviceId = utils.getToken();
 
-    utils.setCookie(deviceCookieName, deviceId, laterDate);
+    utils.setCookie(deviceCookieName, deviceId, laterDate, false);
     
     return deviceId;
 

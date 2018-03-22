@@ -1,4 +1,4 @@
-import timeManager from '../timeManager';
+import utils from '../utils';
 /**
  * @module OrientationCollector
  * @description Calculates the position and other events associated with position data
@@ -34,7 +34,7 @@ function setPositionCallback(newPositionCallback){
  * @memberof OrientationCollector
  * @returns {array} event deatails in format [name, position, extraInfo]
  */
-function getEvents(){
+function getEvents(duration){
 
     if (positionCallback == null){
         return [];
@@ -50,7 +50,7 @@ function getEvents(){
 
     const extra = {
         'ik': ['Time'],
-        'iv': [timeManager.getFrameDurationSeconds()],
+        'iv': [utils.getDataPointDuration(duration)],
         'fk': [],
         'fv': []
     };

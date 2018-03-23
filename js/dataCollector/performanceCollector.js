@@ -58,6 +58,8 @@ function tick(){
 
 function destroy(){
 
+    framesTillNow = 0;
+
 }
 
 

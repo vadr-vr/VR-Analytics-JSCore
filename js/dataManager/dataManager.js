@@ -28,24 +28,29 @@ let timeSinceRequestChecker = null;
  */
 function init(){
 
+    eventDataPairs = 0;
     currentSession = sessionManager.createSession();
     lastRequestTime = utils.getUnixTimeInSeconds();
+    mediaPlaying = false;
 
     // checks if time since last request has exceeded the maximum request time
-    if (!timeSinceRequestChecker){
+    if (timeSinceRequestChecker){
 
-        timeSinceRequestChecker = setInterval(
-            () => {
-                const currentTime = utils.getUnixTimeInSeconds();
-                if (currentTime - lastRequestTime > config.getDataPostTimeInterval()){
-    
-                    _createDataRequest();
-    
-                }
-            }, 
-            1000);
+        clearInterval(timeSinceRequestChecker);
+        timeSinceRequestChecker = null;
 
     }
+
+    timeSinceRequestChecker = setInterval(
+        () => {
+            const currentTime = utils.getUnixTimeInSeconds();
+            if (currentTime - lastRequestTime > config.getDataPostTimeInterval()){
+
+                _createDataRequest();
+
+            }
+        }, 
+        1000);
 
 }
 

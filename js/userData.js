@@ -9,8 +9,14 @@ import enums from './enums';
  */
 
 let userId = null;
-let extraInfo = {};
+let extraInfo = null;
 
+function init(){
+
+    userId = null;
+    extraInfo = {};
+
+}
 /**
  * Set user id
  * @memberof User
@@ -103,6 +109,7 @@ function getUserDictionary(){
 }
 
 export default {
+    init,
     setUserId,
     setExtraInfo,
     setAge,

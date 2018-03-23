@@ -44,6 +44,18 @@ const dataConfig = {
     'Performance': performanceDict
 };
 
+function init(){
+
+    for (let key in dataConfig){
+
+        dataConfig[key]['status'] = true;
+
+    }
+
+    destroy();
+
+}
+
 /**
  * Sets the function to call when setting position
  * @memberof DataCollector
@@ -190,6 +202,7 @@ function destroy(){
 }
 
 export default {
+    init,
     setPositionCallback,
     setGazeCallback,
     setAngleCallback,

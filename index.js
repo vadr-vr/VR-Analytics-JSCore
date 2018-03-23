@@ -21,8 +21,10 @@ logger.setLogLevel(4);
 function initVadRAnalytics(){
 
     timeManager.init();
+    dataCollector.init();
     dataManager.init();
     deviceData.init();
+    user.init();
 
 }
 

@@ -49,6 +49,7 @@ function init(){
     for (let key in dataConfig){
 
         dataConfig[key]['status'] = true;
+        dataConfig[key]['lastFetchTime'] = 0;
 
     }
 

@@ -4,7 +4,6 @@ import sessionManager from './sessionManager';
 import config from '../config';
 import enums from '../enums';
 import timeManager from '../timeManager';
-import dataCollector from '../dataCollector/dataCollector';
 import serverRequestManager from './serverRequestManager';
 
 /**

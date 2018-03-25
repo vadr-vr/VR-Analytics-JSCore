@@ -1,5 +1,21 @@
 import utils from '../utils';
 import timeManager from '../timeManager';
+import gazeCollector from '../dataCollector/gazeCollector';
+
+const _getGazeAngle = (position) => {
+
+    if (position){
+
+        return position;
+
+    }else{
+
+        const angle = gazeCollector.getAngle();
+        return angle ? angle : '0.0,0.0,0.0';
+
+    }
+
+}
 
 /**
  * Stores events for a single media playback.
@@ -56,7 +72,7 @@ class MediaSession{
     registerEvent(eventName, position, extra, gameTime){
 
         this.events.eventName.push(eventName);
-        this.events.position.push(position);
+        this.events.position.push(_getGazeAngle(position));
         this.events.extra.push(extra);
         this.events.gameTime.push(gameTime);
         this.events.eventTime.push(timeManager.getFrameUnixTime());

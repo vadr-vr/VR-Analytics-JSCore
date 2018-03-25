@@ -28,6 +28,17 @@ function setAngleCallback(newAngleCallback){
 
 }
 
+function getAngle(){
+
+    if (angleCallback){
+
+        return angleCallback();
+
+    }
+
+    return null;
+}
+
 /**
  * returns array of all the position related events with extra info and filters
  * @memberof GazeCollector
@@ -104,6 +115,7 @@ function destroy(){
 export default {
     setGazeCallback,
     setAngleCallback,
+    getAngle,
     getEvents,
     getMediaEvents,
     destroy

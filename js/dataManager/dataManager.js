@@ -144,14 +144,7 @@ function closeMedia(){
 
 function playMedia(){
 
-    let userPosition = '';
-    if (dataCollector.callbacks.positionCallback){
-
-        userPosition = dataCollector.callbacks.positionCallback();
-
-    }
-
-    registerEvent('vadrVideo Play', userPosition,
+    registerEvent('vadrVideo Play', null,
         {
             'ik': [],
             'iv': [],
@@ -165,14 +158,7 @@ function playMedia(){
 
 function pauseMedia(){
 
-    let userPosition = '';
-    if (dataCollector.callbacks.positionCallback){
-
-        userPosition = dataCollector.callbacks.positionCallback();
-
-    }
-
-    registerEvent('vadrVideo Pause', userPosition,
+    registerEvent('vadrVideo Pause', null,
         {
             'ik': [],
             'iv': [],
@@ -186,16 +172,9 @@ function pauseMedia(){
 
 function changeSeek(newSeek){
 
-    let userPosition = '';
-    if (dataCollector.callbacks.positionCallback){
-
-        userPosition = dataCollector.callbacks.positionCallback();
-
-    }
-
     timeManager.setVideoDuration(newSeek);
     
-    registerEvent('vadrVideo Seek', userPosition,
+    registerEvent('vadrVideo Seek', null,
         {
             'ik': ['oldSeek', 'newSeek'],
             'iv': [timeManager.getVideoDuration(), newSeek],

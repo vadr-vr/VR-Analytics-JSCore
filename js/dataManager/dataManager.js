@@ -172,12 +172,13 @@ function pauseMedia(){
 
 function changeSeek(newSeek){
 
+    const oldSeek = timeManager.getVideoDuration();
     timeManager.setVideoDuration(newSeek);
     
     registerEvent('vadrVideo Seek', null,
         {
-            'ik': ['oldSeek', 'newSeek'],
-            'iv': [timeManager.getVideoDuration(), newSeek],
+            'ik': ['From Time', 'To Time'],
+            'iv': [oldSeek, newSeek],
             'fk': [],
             'fv': []
         });

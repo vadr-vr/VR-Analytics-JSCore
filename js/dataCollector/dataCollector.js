@@ -146,7 +146,7 @@ function tick(){
 
         if (infoDict.status && 
             playTimeSinceStart - infoDict.lastFetchTime > infoDict.timePeriod){
-
+            
             const timeDifferene = playTimeSinceStart - infoDict.lastFetchTime;
 
             if (useMedia)

@@ -2,6 +2,7 @@ import logger from '../logger';
 import utils from '../utils';
 import sessionManager from './sessionManager';
 import config from '../config';
+import enums from '../enums';
 import timeManager from '../timeManager';
 import dataCollector from '../dataCollector/dataCollector';
 import serverRequestManager from './serverRequestManager';
@@ -74,6 +75,10 @@ function addSessionExtra(infoKey, infoValue){
  */
 function addScene(sceneId, sceneName){
 
+    // close any previous media
+    if (mediaPlaying)
+        closeMedia();
+
     currentSession.addScene(sceneId, sceneName);
 
 }
@@ -83,6 +88,10 @@ function addScene(sceneId, sceneName){
  * @memberof DataManager
  */
 function closeScene(){
+
+    // close any previous media
+    if (mediaPlaying)
+        closeMedia();
 
     currentSession.closeScene();
     _createDataRequest();
@@ -103,21 +112,21 @@ function addMedia(mediaId, name, type, url){
     if (mediaPlaying)
         closeMedia();
         
-    mediaPlaying = true;
-    let typeInteger = 1;
+    if (type != enums.media360.video && type != enums.media360.image){
 
-    if (type == 'Video'){
-
-        timeManager.playVideo();
-        typeInteger = 1;
-    
-    } else {
-
-        typeInteger = 2;
+        logger.warn('Media type not supported. Aborting addind media.');
+        return;
     
     }
 
-    currentSession.addMedia(mediaId, name, typeInteger, url);
+    if (type == enums.media360.video){
+
+        timeManager.playVideo();
+
+    }
+
+    mediaPlaying = true;
+    currentSession.addMedia(mediaId, name, type, url);
 
 }
 
@@ -142,14 +151,13 @@ function playMedia(){
 
     }
 
-    registerEvent('vadrMedia Play', userPosition,
+    registerEvent('vadrVideo Play', userPosition,
         {
             'ik': [],
             'iv': [],
             'fk': [],
             'fv': []
-        },
-        timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
+        });
 
     timeManager.playVideo();
 
@@ -164,14 +172,13 @@ function pauseMedia(){
 
     }
 
-    registerEvent('vadrMedia Pause', userPosition,
+    registerEvent('vadrVideo Pause', userPosition,
         {
             'ik': [],
             'iv': [],
             'fk': [],
             'fv': []
-        }, 
-        timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
+        });
 
     timeManager.pauseVideo();
 
@@ -186,16 +193,15 @@ function changeSeek(newSeek){
 
     }
 
-    registerEvent('vadrMedia Pause', userPosition,
+    timeManager.setVideoDuration(newSeek);
+    
+    registerEvent('vadrVideo Seek', userPosition,
         {
             'ik': ['oldSeek', 'newSeek'],
             'iv': [timeManager.getVideoDuration(), newSeek],
             'fk': [],
             'fv': []
-        },
-        timeManager.getFrameUnixTime(), timeManager.getPlayTimeSinceStartSeconds());
-
-    timeManager.setVideoDuration(newSeek);
+        });
 
 }
 
@@ -272,7 +278,7 @@ function _createDataRequest(){
 function _checkDataPairs(){
 
     eventDataPairs++;
-    if (eventDataPairs >= config.getMaxEventsNumber){
+    if (eventDataPairs >= config.getMaxEventsNumber()){
 
         _createDataRequest();
 

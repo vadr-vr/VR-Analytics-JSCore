@@ -10,6 +10,12 @@ const gender = {
     'other': 3
 };
 
+const media360 = {
+    'video': 1,
+    'image': 2
+};
+
 export default {
-    gender
+    gender,
+    media360
 };

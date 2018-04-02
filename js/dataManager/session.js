@@ -46,9 +46,9 @@ class Session{
 
         }
 
-        if (typeof(value) == 'string' && value.length > 100){
+        if (typeof(value) == 'string' && value.length > 255){
 
-            logger.error('Max length of session extra info val is 100 chars. Aborting.');
+            logger.error('Max length of session extra info val is 255 chars. Aborting.');
             return;
             
         }

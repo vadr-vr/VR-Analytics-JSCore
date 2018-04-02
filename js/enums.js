@@ -15,7 +15,14 @@ const media360 = {
     'image': 2
 };
 
+const defaultEvents = {
+    'orientation': 'orientation',
+    'gaze': 'gaze',
+    'performance': 'performance'
+};
+
 export default {
     gender,
-    media360
+    media360,
+    defaultEvents
 };

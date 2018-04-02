@@ -18,21 +18,21 @@ const callbacks = {
 
 // contains the default events that can be collected
 const gazeDict = {
-    'timePeriod': 200,
+    'timePeriod': 300,
     'lastFetchTime': 0,
     'status': true,
     'calculator': gazeCollector
 };
 
 const orientationDict = {
-    'timePeriod': 200,
+    'timePeriod': 300,
     'lastFetchTime': 0,
     'status': true,
     'calculator': orientationCollector
 };
 
 const performanceDict = {
-    'timePeriod': 200,
+    'timePeriod': 300,
     'lastFetchTime': 0,
     'status': true,
     'calculator': performanceCollector
@@ -122,9 +122,25 @@ function configureEventCollection(eventType, collectionStatus, timePeriod){
 
     if (eventType in dataConfig){
 
+        // check that collection status is present as true or false
+        collectionStatus = collectionStatus == false ? false : true;
         dataConfig[eventType].status = collectionStatus;
-        dataConfig[eventType].timePeriod = timePeriod;
 
+        if(!isNaN(timePeriod)){
+
+            timePeriod = parseInt(timePeriod);
+
+            if(timePeriod > 0){
+
+                dataConfig[eventType].timePeriod = timePeriod;
+
+            }else{
+
+                dataConfig[eventType].status = false;
+
+            }
+            
+        }
     }
 
 }

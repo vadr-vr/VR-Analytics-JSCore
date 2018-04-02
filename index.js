@@ -18,13 +18,62 @@ import enums from './js/enums';
  */
 logger.setLogLevel(4);
 
-function initVadRAnalytics(){
+/**
+ * inits the vadr analytics core for a new application
+ * @param {*} params default event configuration and extra session metadata
+ */
+function initVadRAnalytics(params){
 
     timeManager.init();
     dataCollector.init();
     dataManager.init();
     deviceData.init();
     user.init();
+
+    // set initial params if provided
+    _setParams(params);
+
+}
+/**
+ * set the params for the application
+ * @param {Object} params
+ * @param {Object[]} params.defaultEvents array containing the configuretion for default events
+ * @param {Object[]} params.sessionInfo array containing the meta data for session
+ */
+function _setParams(params){
+
+    if(params){
+
+        // set the data collection params
+        if(params.defaultEvents){
+
+            for (let i = 0; i < params.defaultEvents.length; i++){
+
+                dataCollector.configureEventCollection(
+                    params.defaultEvents[i].name,
+                    params.defaultEvents[i].status,
+                    params.defaultEvents[i].timePeriod
+                );
+
+            }
+
+        }
+
+        // set the session Info
+        if(params.sessionInfo){
+
+            for(let i = 0; i < params.sessionInfo.length; i++){
+
+                dataManager.addSessionExtra(
+                    params.sessionInfo[i].key,
+                    params.sessionInfo[i].value
+                );
+
+            }
+            
+        }
+
+    }
 
 }
 

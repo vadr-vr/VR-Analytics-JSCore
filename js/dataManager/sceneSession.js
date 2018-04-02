@@ -5,8 +5,8 @@ import mediaSession from './mediaSession';
 
 /**
  * Stores events for a single scene play.
- * @param {string} sceneId Developer defined sceneId for the scene
- * @param {string} name Media name to be displayed to the analytics user [optional]
+ * @param {string} sceneId Developer defined sceneId for the scene [optional - either this or provide name]
+ * @param {string} name Scene name to be displayed to the analytics user [optional - either this or provide sceneId]
  */
 class SceneSession{
     
@@ -113,12 +113,14 @@ class SceneSession{
     getDictionary(){
 
         const sceneSessionDictionary = {
-            'sceneId': this.sceneId,
             'startTime': utils.convertMillisecondsToSeconds(this.startTime),
             'sceneToken': this.token,
             'events': this.events,
             'media': []
         };
+
+        if (this.sceneId)
+            sceneSessionDictionary['sceneId'] = this.sceneId;
 
         if (this.name)
             sceneSessionDictionary['sceneName'] = this.name;

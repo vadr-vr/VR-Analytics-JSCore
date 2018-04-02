@@ -69,10 +69,17 @@ function addSessionExtra(infoKey, infoValue){
 /**
  * create scene session
  * @memberof DataManager
- * @param {string} sceneId id of the new scene
- * @param {string} sceneName name of the new scene [optional]
+ * @param {string} sceneId id of the new scene [optional - either this or sceneName]
+ * @param {string} sceneName name of the new scene [optional - either this or sceneId]
  */
 function addScene(sceneId, sceneName){
+
+    if (!sceneId && !sceneName){
+
+        logger.warn('SceneId or SceneName is required to starting a new scene session. Aborting');
+        return;
+        
+    }
 
     // close any previous media
     if (mediaPlaying)

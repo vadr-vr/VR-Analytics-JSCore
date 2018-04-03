@@ -73,6 +73,13 @@ function _setParams(params){
             
         }
 
+        // set pauseOnHeadsetRemove
+        if('pauseOnHeadsetRemove' in params){
+
+            timeManager.setRemoveHeadsetPausesPlay(!!params['pauseOnHeadsetRemove']);
+
+        }
+
     }
 
 }

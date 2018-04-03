@@ -1,6 +1,6 @@
 {
   "name": "vadr-core-vr",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Used by VadR Networks platform specific packages to provide VR analytics",
   "main": "index.js",
   "scripts": {

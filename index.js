@@ -17,6 +17,7 @@ import enums from './js/enums';
  * If you are using any other platform for development, please reach out to abhishek@vadr.io.
  */
 logger.setLogLevel(4);
+let initState = false;
 
 /**
  * inits the vadr analytics core for a new application
@@ -29,6 +30,8 @@ function initVadRAnalytics(params){
     dataManager.init();
     deviceData.init();
     user.init();
+
+    initState = true;
 
     // set initial params if provided
     _setParams(params);
@@ -86,13 +89,18 @@ function _setParams(params){
 
 function tick(time, timeDelta){
 
-    timeManager.tick(timeDelta);
-    dataCollector.tick();
+    if (initState){
+        
+        timeManager.tick(timeDelta);
+        dataCollector.tick();
+
+    }
 
 }
 
 function destroy(){
 
+    initState = false;
     dataManager.destroy();
 
 }

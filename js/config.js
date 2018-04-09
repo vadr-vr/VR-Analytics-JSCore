@@ -6,7 +6,7 @@ import utils from './utils';
  */
 
 let testMode = false;
-let dataPostTimeInterval = 30;
+let dataPostTimeInterval = 15;
 let dataPostMaxEvents = 1000;
 
 let sdkType = 'vadrCore';

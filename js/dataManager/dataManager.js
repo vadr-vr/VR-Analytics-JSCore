@@ -246,6 +246,7 @@ function destroy(){
 function _createDataRequest(){
 
     logger.info('Creating data request');
+    eventDataPairs = 0;
     const currentSessionData = currentSession.getDictionary();
     serverRequestManager.addDataRequest(currentSessionData);
     

@@ -107,6 +107,8 @@ function destroy(){
 
 
 export default {
+    enums,
+    logger,
     initVadRAnalytics,
     destroy,
     setLogLevel: logger.setLogLevel,
@@ -117,7 +119,6 @@ export default {
         setDefaultData: dataCollector.configureEventCollection,
         setRequestUrl: constants.setRequestUrl
     },
-    enums,
     user: {
         setUserId: userId => {user.setUserId(userId, true);},
         setUserAge: user.setAge,

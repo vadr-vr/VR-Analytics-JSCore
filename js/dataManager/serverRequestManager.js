@@ -73,13 +73,19 @@ function destroy(){
 
 function _getServerRequest(sessionRequest){
 
+    const appId = config.getApplication.id();
     const dataRequest = {
-        appId: config.getApplication.id(),
         appToken: config.getApplication.token(),
         version: config.getApplication.version(),
         device: device.getDeviceInformation(),
         sessions: [sessionRequest]
     };
+
+    if (appId){
+
+        dataRequest['appId'] = appId;
+
+    }
 
     return JSON.stringify(dataRequest);
 

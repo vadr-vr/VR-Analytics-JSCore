@@ -167,8 +167,9 @@ function tick(){
 
             if (useMedia)
                 _setEvents(infoDict.calculator.getMediaEvents(timeDifferene));
-            else
-                _setEvents(infoDict.calculator.getEvents(timeDifferene));
+            
+            // always collecting default events
+            _setEvents(infoDict.calculator.getEvents(timeDifferene));
                 
             infoDict.lastFetchTime = playTimeSinceStart;
 

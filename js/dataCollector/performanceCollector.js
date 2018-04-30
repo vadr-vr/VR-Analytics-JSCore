@@ -46,7 +46,7 @@ function getEvents(duration){
 
 function getMediaEvents(duration){
 
-    return _getEvents(duration);
+    return [];
 
 }
 
